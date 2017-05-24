@@ -1,6 +1,6 @@
 {
   "name": "ngx-gdeic",
-  "version": "0.0.0-test",
+  "version": "0.0.0",
   "description": "",
   "main": "bundles/ngx-gdeic.umd.js",
   "scripts": {
