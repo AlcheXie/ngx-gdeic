@@ -1,0 +1,28 @@
+{
+  "name": "ngx-gdeic",
+  "version": "0.0.0-test",
+  "description": "",
+  "main": "bundles/ngx-gdeic.umd.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlcheXie/ngx-gdeic.git"
+  },
+  "author": "AlcheXie",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AlcheXie/ngx-gdeic/issues"
+  },
+  "homepage": "https://github.com/AlcheXie/ngx-gdeic#readme",
+  "devDependencies": {
+    "@angular/common": "^4.0.0",
+    "@angular/core": "^4.0.0",
+    "@angular/http": "^4.0.0",
+    "@angular/platform-browser": "^4.0.0",
+    "rxjs": "^5.4.0",
+    "webpack": "^2.6.0",
+    "zone.js": "^0.8.11"
+  }
+}
