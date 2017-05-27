@@ -2,8 +2,8 @@ import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 
-import { Gdeic } from './services/gdeic.service';
-import { GdeicConfig, GdeicConfigConfig } from './services/gdeic-config.service';
+import { Gdeic } from './service/gdeic.service';
+import { GdeicConfig, GdeicConfigConfig } from './service/gdeic-config.service';
 
 @NgModule({
     imports: [
@@ -17,13 +17,6 @@ import { GdeicConfig, GdeicConfigConfig } from './services/gdeic-config.service'
     exports: []
 })
 export class GdeicModule {
-    constructor( @Optional() @SkipSelf() parentModule: GdeicModule) {
-        if (parentModule) {
-            throw new Error(
-                'GdeicModule is already loaded. Import it in the AppModule only');
-        }
-    }
-
     static fooRoot(config: GdeicConfigConfig): ModuleWithProviders {
         return {
             ngModule: GdeicModule,
