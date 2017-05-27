@@ -20,6 +20,11 @@ module.exports = {
             use: [
                 'awesome-typescript-loader'
             ]
+        }, {
+            test: /\.html$/,
+            use: [
+                'html-loader'
+            ]
         }]
     },
     devtool: "sourcemap"

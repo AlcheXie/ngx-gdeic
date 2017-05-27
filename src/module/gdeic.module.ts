@@ -1,9 +1,12 @@
-import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 
 import { Gdeic } from './service/gdeic.service';
 import { GdeicConfig, GdeicConfigConfig } from './service/gdeic-config.service';
+import { GdeicRestful } from './service/gdeic-restful.service';
+
+import { GdeicSysResource } from './resource/gdeic-sys.resource';
 
 @NgModule({
     imports: [
@@ -11,7 +14,10 @@ import { GdeicConfig, GdeicConfigConfig } from './service/gdeic-config.service';
         HttpModule
     ],
     providers: [
-        Gdeic
+        Gdeic,
+        GdeicConfig,
+        GdeicRestful,
+        GdeicSysResource
     ],
     declarations: [],
     exports: []
