@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { GdeicRestfulResource, GdeicRestful } from '../service/gdeic-restful.service'
+import { GdeicRestfulResource, GdeicRestful } from '../../service/gdeic-restful.service'
 
 @Injectable()
 export class GdeicSysResource implements GdeicRestfulResource {

@@ -6,7 +6,7 @@ import { Gdeic } from './service/gdeic.service';
 import { GdeicConfig, GdeicConfigConfig } from './service/gdeic-config.service';
 import { GdeicRestful } from './service/gdeic-restful.service';
 
-import { GdeicSysResource } from './resource/gdeic-sys.resource';
+import { GdeicSysResource } from './service/restful-resource/gdeic-sys.resource';
 
 @NgModule({
     imports: [

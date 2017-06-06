@@ -22,14 +22,14 @@ export interface ResultError {
     ErrorMsg?: string
 }
 
-const _timeDiff = -((new Date()).getTimezoneOffset() / 60);
-const _paramMethodSet = new Set(['get', 'delete', 'head', 'options']),
+const _TIMEDIFF = -((new Date()).getTimezoneOffset() / 60);
+const _PARAM_METHOD_SET = new Set(['get', 'delete', 'head', 'options']),
     _bodyMethodSet = new Set(['post', 'put', 'patch']);
 
-let _loading$ = new Subject<boolean>(),
-    _error$ = new Subject<ResultError>();
+const _LOADING$ = new Subject<boolean>(),
+    _ERROR$ = new Subject<ResultError>();
 
-const _formatResponseData = (data: any) => {
+let _formatResponseData = (data: any) => {
     if (data.constructor === Array) {
         for (let value of data) {
             if (value.constructor === Object || value.constructor === Array) {
@@ -47,7 +47,7 @@ const _formatResponseData = (data: any) => {
                     if (/T\d{2}:\d{2}:\d{2}$/.test(value)) {
                         value = `${value}.000Z`;
                     }
-                    data[key] = (new Date(value)).addHours(-_timeDiff);
+                    data[key] = (new Date(value)).addHours(-_TIMEDIFF);
                 }
             } else if (value.constructor === Object || value.constructor === Array) {
                 _formatResponseData(value);
@@ -55,7 +55,7 @@ const _formatResponseData = (data: any) => {
         }
     }
 };
-const _formatRequestData = (data: any) => {
+let _formatRequestData = (data: any) => {
     if (data.constructor === Array) {
         for (let value of data) {
             if (value.constructor === Object || value.constructor === Array) {
@@ -67,7 +67,7 @@ const _formatRequestData = (data: any) => {
             let value = data[key];
             if (value === undefined || value === null) { continue; }
             if (value.constructor === Date) {
-                data[key] = value.addHours(_timeDiff);
+                data[key] = value.addHours(_TIMEDIFF);
             } else if (value.constructor === Object || value.constructor === Array) {
                 _formatRequestData(value);
             }
@@ -75,23 +75,23 @@ const _formatRequestData = (data: any) => {
     }
 }
 
-const _extractData = (rejectMethod: Function) => ((res: Response) => {
+let _extractData = (rejectMethod: Function) => ((res: Response) => {
     let body = res.json();
     if (body.StatusCode === 0) {
-        _error$.next({ StatusCode: 0 });
+        _ERROR$.next({ StatusCode: 0 });
         _formatResponseData(body.Data);
-        _loading$.next(false);
+        _LOADING$.next(false);
         return body.Data || {};
     } else {
-        _error$.next({ StatusCode: body.StatusCode, ErrorMsg: body.ErrorMsg });
-        _loading$.next(false);
+        _ERROR$.next({ StatusCode: body.StatusCode, ErrorMsg: body.ErrorMsg });
+        _LOADING$.next(false);
         return rejectMethod(body.ErrorMsg);
     }
 });
-const _handleError = (rejectMethod: Function) => ((res: Response) => {
-    _loading$.next(false);
+let _handleError = (rejectMethod: Function) => ((res: Response) => {
+    _LOADING$.next(false);
     let error = { StatusCode: +res.status, ErrorMsg: res.json().Message };
-    _error$.next(error);
+    _ERROR$.next(error);
     return rejectMethod(error);
 });
 
@@ -100,23 +100,23 @@ export class GdeicRestful {
     constructor() { }
 
     static get loading$() {
-        return _loading$;
+        return _LOADING$;
     }
 
     static get error$() {
-        return _error$;
+        return _ERROR$;
     }
 
     static make(actions: Object, instance: GdeicRestfulResource, http: Http) {
         let _makeResourceMethod = (action: Action): Function => {
             let _method = action.method || 'get';
             _method = _method.toLowerCase();
-            if (!_paramMethodSet.has(_method) && !_bodyMethodSet.has(_method)) {
+            if (!_PARAM_METHOD_SET.has(_method) && !_bodyMethodSet.has(_method)) {
                 _method = 'get';
             }
 
             let _url = action.url;
-            if (_paramMethodSet.has(_method)) {
+            if (_PARAM_METHOD_SET.has(_method)) {
                 return (search: Object = null): Observable<Response> => {
                     if (search) {
                         for (let key of Object.keys(search)) {
@@ -146,14 +146,14 @@ export class GdeicRestful {
     }
 
     static getObservable(observable: Observable<Response>, isHoldOn: boolean = false): Observable<any> {
-        if (isHoldOn) { _loading$.next(true); }
+        if (isHoldOn) { _LOADING$.next(true); }
         return observable
             .map(_extractData(Observable.throw))
             .catch(_handleError(Observable.throw));
     }
 
     static getPromise(observable: Observable<Response>, isHoldOn: boolean = false): Promise<any> {
-        if (isHoldOn) { _loading$.next(true); }
+        if (isHoldOn) { _LOADING$.next(true); }
         return observable.toPromise()
             .then(_extractData(Promise.reject))
             .catch(_handleError(Promise.reject));

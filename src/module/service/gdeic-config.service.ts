@@ -6,11 +6,15 @@ export class GdeicConfigConfig {
 
 @Injectable()
 export class GdeicConfig {
-    private _appTitle;
+    _appTitle: string;
 
     constructor( @Optional() config: GdeicConfigConfig) {
         if (config) {
             this._appTitle = config.appTitle;
         }
+    }
+
+    get appTitle() {
+        return this._appTitle;
     }
 }

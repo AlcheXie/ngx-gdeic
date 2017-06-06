@@ -25,6 +25,11 @@ module.exports = {
             use: [
                 'html-loader'
             ]
+        }, {
+            test: /\.css/,
+            use: [
+                'raw-loader'
+            ]
         }]
     },
     devtool: "sourcemap"
