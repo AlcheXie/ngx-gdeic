@@ -13,7 +13,7 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.ts']
     },
-    externals: [/^\@angular\//, /^rxjs\//],
+    externals: [/^\@angular\//, /^rxjs\//, /^lingts$/],
     module: {
         rules: [{
             test: /\.ts$/,

@@ -8,13 +8,13 @@ export class GdeicConfigConfig {
 export class GdeicConfig {
     _appTitle: string;
 
+    get appTitle() {
+        return this._appTitle;
+    }
+
     constructor( @Optional() config: GdeicConfigConfig) {
         if (config) {
             this._appTitle = config.appTitle;
         }
-    }
-
-    get appTitle() {
-        return this._appTitle;
     }
 }
