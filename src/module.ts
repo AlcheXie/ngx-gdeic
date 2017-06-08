@@ -5,6 +5,7 @@ export * from  './module/const/gdeic-component-cache.const'
 export * from './module/class/GdeicPage';
 
 export * from './module/class/component-base/gdeic-hold-on/GdeicHoldOn';
+export * from './module/class/component-base/gdeic-paging/GdeicPaging';
 
 // Service
 export * from './module/service/gdeic.service';

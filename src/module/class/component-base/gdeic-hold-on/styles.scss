@@ -10,9 +10,9 @@
         >.gdeic-holdOn-body {
             position: absolute;
             z-index: 9999;
+            top: 30%;
             left: 50%;
             @include transform(translateX(-50%));
-            margin-top: 30%;
             padding: 25px;
             @include border-radius(10px);
             background-color: #AEAEAE;
