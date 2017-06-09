@@ -6,6 +6,7 @@ const _FINISH_INIT$ = new Subject<boolean>();
 
 let _isFinishInit = false;
 let _remove$Char = (data: any) => {
+    if (data === undefined || data === null) { return; }
     if (data.constructor === Array) {
         for (let value of data) {
             if (value.constructor === Object || value.constructor === Array) {
@@ -19,6 +20,7 @@ let _remove$Char = (data: any) => {
                 continue;
             }
             let value = data[key];
+            if (value === undefined || value === null) { continue; }
             if (value.constructor === Object || value.constructor === Array) {
                 _remove$Char(value);
             }
@@ -42,12 +44,15 @@ export class Gdeic {
     }
 
     static toJson(source: any): string {
-        source = _remove$Char(Gdeic.copy(source));
+        source = Gdeic.copy(source);
+        _remove$Char(source);
         return JSON.stringify(source);
     }
 
     static fromJson(json: string): any {
-        return JSON.parse(json);
+        let result = JSON.parse(json);
+        _remove$Char(result)
+        return result;
     }
 
     static get isFinishInit() {
@@ -71,7 +76,25 @@ export class Gdeic {
         }
     }
 
-    static toggleItem(source: any[] = [], item: any, property: string) {
+    static toggleItem(source: any[] = [], item: any, property?: string): boolean {
+        let _nIdx, _oToggle;
+        if (property === undefined) {
+            _oToggle = item;
+            _nIdx = source.map(item => Gdeic.toJson(item)).indexOf(Gdeic.toJson(_oToggle));
+        } else {
+            if (item.hasOwnProperty(property)) {
+                _oToggle = item[property];
+                _nIdx = source.indexOf(_oToggle);
+            } else {
+                return false;
+            }
+        }
 
+        if (_nIdx > -1) {
+            source.splice(_nIdx, 1);
+        } else {
+            source.push(_oToggle);
+        }
+        return true;
     }
 }

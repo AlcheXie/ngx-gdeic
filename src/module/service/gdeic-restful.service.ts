@@ -30,6 +30,7 @@ const _LOADING$ = new Subject<boolean>(),
     _ERROR$ = new Subject<ResultError>();
 
 let _formatResponseData = (data: any) => {
+    if (data === undefined || data === null) { return; }
     if (data.constructor === Array) {
         for (let value of data) {
             if (value.constructor === Object || value.constructor === Array) {
@@ -56,6 +57,7 @@ let _formatResponseData = (data: any) => {
     }
 };
 let _formatRequestData = (data: any) => {
+    if (data === undefined || data === null) { return; }
     if (data.constructor === Array) {
         for (let value of data) {
             if (value.constructor === Object || value.constructor === Array) {

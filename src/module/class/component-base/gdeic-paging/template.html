@@ -1,0 +1,23 @@
+<div class="text-center" style="border-top: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; padding-top: 20px; padding-bottom: 20px" *ngIf="!hideAlert" [hidden]="pagingModel.pagingListLength > 0">无匹配记录</div>
+<div class="text-center" [hidden]="pagingModel.pagingListLength <= pagingModel.itemsPerPage">
+    <ul class="pagination pagination-{{size}}">
+        <li [ngClass]="{'disabled': pagingModel.currentPage === 1}">
+            <a href (click)="setPage(pagingModel.currentPage - 1)">上一页</a>
+        </li>
+        <li [hidden]="showingPages[0] === 1">
+            <a href (click)="setPage(1)">1</a>
+        </li>
+        <li [hidden]="showingPages[0] - 1 === 0">
+            <a href (click)="setPage(showingPages[0] - 1)">...</a>
+        </li>
+        <li *ngFor="let page of showingPages" [ngClass]="{'active': page === pagingModel.currentPage}">
+            <a href (click)="setPage(page)">{{page}}</a>
+        </li>
+        <li [hidden]="showingPages[showingPages.length - 1] >= pageCount">
+            <a href (click)="setPage(showingPages[showingPages.length - 1] + 1)">...</a>
+        </li>
+        <li [ngClass]="{'disabled': pagingModel.currentPage === pageCount}">
+            <a href (click)="setPage(pagingModel.currentPage + 1)">下一页</a>
+        </li>
+    </ul>
+</div>
