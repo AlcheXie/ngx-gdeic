@@ -1,6 +1,6 @@
 import { ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
 
-import { GdeicPage } from '../../GdeicPage';
+import { GdeicPage } from '../GdeicPage';
 
 export class GdeicPaging {
     @Input() size: string = 'sm';

@@ -1,6 +1,6 @@
 import { Input } from '@angular/core';
 
-import { GdeicRestful } from '../../../service/gdeic-restful.service';
+import { GdeicRestful } from '../../service/gdeic-restful.service';
 
 export class GdeicHoldOn {
     @Input() holdOnText: string;

@@ -2,11 +2,10 @@
 export * from './module/class/GdeicToggle';
 export * from './module/class/GdeicPage';
 
-export * from './module/class/component-base/gdeic-hold-on/GdeicHoldOn';
-export * from './module/class/component-base/gdeic-paging/GdeicPaging';
+export * from './module/class/component-base/GdeicHoldOn';
+export * from './module/class/component-base/GdeicPaging';
 
 // Const
-export * from './module/const/gdeic-component-cache.const'
 
 // Directive
 export * from './module/directive/prevent-propagation.directive';
