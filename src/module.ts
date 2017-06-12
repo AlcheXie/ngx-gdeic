@@ -1,3 +1,6 @@
+// Class
+export * from './module/class/GdeicToggle';
+
 // Service
 export * from './module/service/gdeic.service';
 export * from './module/service/gdeic-cache.service';
