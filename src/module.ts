@@ -1,6 +1,9 @@
 // Class
 export * from './module/class/GdeicToggle';
 
+// Directive
+export * from './module/directive/gdeic-prevent-propagation.directive';
+
 // Service
 export * from './module/service/gdeic.service';
 export * from './module/service/gdeic-cache.service';

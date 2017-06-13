@@ -9,6 +9,8 @@ import { GdeicRestful } from './service/gdeic-restful.service';
 
 import { GdeicSysResource } from './service/restful-resource/gdeic-sys.resource';
 
+import { GdeicPreventPropagationDirective } from './directive/gdeic-prevent-propagation.directive';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -21,8 +23,8 @@ import { GdeicSysResource } from './service/restful-resource/gdeic-sys.resource'
     GdeicRestful,
     GdeicSysResource
   ],
-  declarations: [],
-  exports: []
+  declarations: [GdeicPreventPropagationDirective],
+  exports: [GdeicPreventPropagationDirective]
 })
 export class GdeicModule {
   static fooRoot(config: GdeicConfigConfig): ModuleWithProviders {
