@@ -5,7 +5,7 @@ import { GdeicRestful } from '../../service/gdeic-restful.service';
 export class GdeicHoldOn {
     @Input() holdOnText: string;
 
-    protected isHoldingOn: boolean;
+    isHoldingOn: boolean;
 
     constructor() {
         GdeicRestful.loading$.subscribe(data => this.isHoldingOn = data);

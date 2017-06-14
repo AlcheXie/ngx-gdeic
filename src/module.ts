@@ -12,6 +12,7 @@ export * from './module/directive/prevent-propagation.directive';
 
 // Service
 export * from './module/service/gdeic.service';
+export * from './module/service/gdeic-cache.service';
 export * from './module/service/gdeic-config.service';
 export * from './module/service/gdeic-restful.service';
 

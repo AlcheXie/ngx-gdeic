@@ -68,7 +68,8 @@ export class Gdeic {
         if (!_isFinishInit) {
             _FINISH_INIT$.subscribe(data => {
                 if (data === true) {
-                    callback()
+                    callback();
+                    _FINISH_INIT$.unsubscribe();
                 }
             });
         } else {
