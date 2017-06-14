@@ -1,6 +1,9 @@
 // Class
 export * from './module/class/GdeicToggle';
 
+// Component
+export * from './module/component/gdeic-hold-on.component';
+
 // Directive
 export * from './module/directive/gdeic-prevent-propagation.directive';
 

@@ -9,6 +9,8 @@ import { GdeicRestful } from './service/gdeic-restful.service';
 
 import { GdeicSysResource } from './service/restful-resource/gdeic-sys.resource';
 
+import { GdeicHoldOnComponent } from './component/gdeic-hold-on.component';
+
 import { GdeicPreventPropagationDirective } from './directive/gdeic-prevent-propagation.directive';
 
 @NgModule({
@@ -23,8 +25,14 @@ import { GdeicPreventPropagationDirective } from './directive/gdeic-prevent-prop
     GdeicRestful,
     GdeicSysResource
   ],
-  declarations: [GdeicPreventPropagationDirective],
-  exports: [GdeicPreventPropagationDirective]
+  declarations: [
+    GdeicHoldOnComponent,
+    GdeicPreventPropagationDirective
+  ],
+  exports: [
+    GdeicHoldOnComponent,
+    GdeicPreventPropagationDirective
+  ]
 })
 export class GdeicModule {
   static fooRoot(config: GdeicConfigConfig): ModuleWithProviders {
