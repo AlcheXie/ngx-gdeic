@@ -80,7 +80,6 @@ let _formatRequestData = (data: any) => {
 let _extractData = (rejectMethod: Function) => ((res: Response) => {
     let body = res.json();
     if (body.StatusCode === 0) {
-        _ERROR$.next({ StatusCode: 0 });
         _formatResponseData(body.Data);
         _LOADING$.next(false);
         return body.Data || {};

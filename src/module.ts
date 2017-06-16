@@ -2,6 +2,7 @@
 export * from './module/class/GdeicToggle';
 export * from './module/class/GdeicPage';
 
+export * from './module/class/component-base/GdeicError';
 export * from './module/class/component-base/GdeicHoldOn';
 export * from './module/class/component-base/GdeicPaging';
 export * from './module/class/component-base/GdeicCommonEdit';

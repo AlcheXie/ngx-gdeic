@@ -29,6 +29,9 @@ export class GdeicCommonEditGuard implements CanActivate {
                 history.back();
                 return false;
             } else {
+                if (Object.keys(_cache).length === 0) {
+                    return true;
+                }
                 if ((() => {
                     for (let key of Object.keys(childRoute.params)) {
                         if (_cache[key] != childRoute.params[key]) { return false; }
