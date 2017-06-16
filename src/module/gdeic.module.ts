@@ -7,6 +7,7 @@ import { GdeicCache } from './service/gdeic-cache.service';
 import { GdeicConfig, GdeicConfigConfig } from './service/gdeic-config.service';
 import { GdeicRestful } from './service/gdeic-restful.service';
 
+import { GdeicCommonEditGuard } from './service/route-guard/gdeic-common-edit-guard.service';
 import { GdeicSysResource } from './service/restful-resource/gdeic-sys.resource';
 
 @NgModule({
@@ -19,6 +20,7 @@ import { GdeicSysResource } from './service/restful-resource/gdeic-sys.resource'
         GdeicCache,
         GdeicConfig,
         GdeicRestful,
+        GdeicCommonEditGuard,
         GdeicSysResource
     ],
     declarations: [],

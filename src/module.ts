@@ -4,6 +4,7 @@ export * from './module/class/GdeicPage';
 
 export * from './module/class/component-base/GdeicHoldOn';
 export * from './module/class/component-base/GdeicPaging';
+export * from './module/class/component-base/GdeicCommonEdit';
 
 // Const
 
@@ -16,6 +17,7 @@ export * from './module/service/gdeic-cache.service';
 export * from './module/service/gdeic-config.service';
 export * from './module/service/gdeic-restful.service';
 
+export * from './module/service/route-guard/gdeic-common-edit-guard.service';
 export * from './module/service/restful-resource/gdeic-sys.resource';
 
 // Total
