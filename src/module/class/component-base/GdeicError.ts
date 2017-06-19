@@ -8,9 +8,7 @@ export class GdeicError {
     isShowError: boolean = false;
 
     constructor(protected _config: GdeicConfig) {
-        console.log(this.isShowError);
         GdeicRestful.error$.subscribe(data => {
-            console.log(data);
             if (this.isShowError) { return }
             this.isShowError = true;
             this.error = data;

@@ -17,7 +17,7 @@ const exec = command => new Promise((resolve, reject) => process.exec(command, (
 
 gulp.task('default', ['webpack'], () => gulp.watch(['src/**/*.ts', 'index.ts', 'src/**/*.html', 'src/**/*.scss'], ['webpack']));
 
-gulp.task('webpack', () => del(['bundles/**/*.css', 'bundles/**/*.html'])
+gulp.task('webpack', ['clean'], () => del(['bundles/**/*.css', 'bundles/**/*.html'])
     .then(() => gulp.src(['src/**/*.scss'])
         .pipe(sass.sync().on('error', sass.logError))
         .pipe(gulp.dest('bundles')))
@@ -36,3 +36,5 @@ gulp.task('webpack', () => del(['bundles/**/*.css', 'bundles/**/*.html'])
 );
 
 gulp.task('sweep', () => del(['**/*.ngfactory.ts', '**/*.ngsummary.json']));
+
+gulp.task('clean', ['sweep'], () => del(['bundles']));

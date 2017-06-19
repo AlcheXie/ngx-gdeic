@@ -1,23 +1,26 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, NavigationEnd, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanDeactivate, NavigationEnd, Router, RouterStateSnapshot } from '@angular/router';
 
 import { Gdeic, GdeicCache } from 'ngx-gdeic';
 
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/fromPromise';
 
 const _EDIT_ITEM_CACHE_NAME = 'coreEditItem';
 let _routerEventMap = new Map();
 
+export interface CanComponentDeactivate {
+    canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;
+}
+
 @Injectable()
-export class GdeicCommonEditGuard implements CanActivate {
+export class GdeicCommonEditGuard implements CanActivate, CanDeactivate {
     private _isNewItem: any;
 
     constructor(
         private _router: Router) { }
 
     canActivate(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        let _cache = GdeicCache.get(_EDIT_ITEM_CACHE_NAME);
+        let _cache = this.getData();
         if (_cache === undefined) {
             let _paths = state.url.split('/').reverse();
             _paths.shift();
@@ -48,6 +51,10 @@ export class GdeicCommonEditGuard implements CanActivate {
         }
     }
 
+    canDeactivate(component: CanComponentDeactivate) {
+        return component.canDeactivate ? component.canDeactivate() : true;
+    }
+
     goNew(currentRoute: ActivatedRoute) {
         this.goEdit({}, 'new', currentRoute);
     }
@@ -55,6 +62,10 @@ export class GdeicCommonEditGuard implements CanActivate {
     goEdit(editItem: any, url: string, currentRoute: ActivatedRoute) {
         GdeicCache.put(_EDIT_ITEM_CACHE_NAME, Gdeic.copy(editItem));
         this._router.navigate([url], { relativeTo: currentRoute });
+    }
+
+    getData(): any {
+        return GdeicCache.get(_EDIT_ITEM_CACHE_NAME);
     }
 
     watchRouteChange(url: string, callback: Function) {

@@ -98,4 +98,19 @@ export class Gdeic {
         }
         return true;
     }
+
+    static getControlsConfig(controlsConfig: { [name: string]: any }, initialValue?: { [name: string]: any }) {
+        controlsConfig = Gdeic.copy(controlsConfig);
+        for (let key of Object.keys(initialValue)) {
+            let _config = controlsConfig[key], _value = initialValue[key];
+            if (_config) {
+                if (_config.constructor === Array) {
+                    _config[0] = _value;
+                } else {
+                    _config = _value;
+                }
+            }
+        }
+        return controlsConfig;
+    }
 }

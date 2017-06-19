@@ -1,5 +1,8 @@
+@import "../../node_modules/ui-gdeic/scss/mixins/mixins";
 :host /deep/ {
-    .holder {
-        margin-bottom: 10px;
+    input {
+        &.ng-touched.ng-invalid {
+            @include box-shadow(0px 0px 8px #f00);
+        }
     }
 }
