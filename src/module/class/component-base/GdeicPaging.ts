@@ -14,8 +14,8 @@ export class GdeicPaging {
     private _isInit: boolean = false;
     private _defaultShowingPages: number[] = [1, 2, 3, 4, 5];
 
-    constructor(protected _elementRef: ElementRef) {
-        // console.log(_elementRef.nativeElement.previousElementSibling);
+    constructor(protected elementRef: ElementRef) {
+        // console.log(elementRef.nativeElement.previousElementSibling);
     }
 
     ngOnChanges(changes: SimpleChanges) {

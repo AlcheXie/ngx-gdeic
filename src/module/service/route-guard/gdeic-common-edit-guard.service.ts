@@ -1,21 +1,20 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanDeactivate, NavigationEnd, Router, RouterStateSnapshot } from '@angular/router';
 
-import { Gdeic, GdeicCache } from 'ngx-gdeic';
+import { Gdeic } from '../gdeic.service';
+import { GdeicCache } from '../gdeic-cache.service';
 
 import { Observable } from 'rxjs/Observable';
 
 const _EDIT_ITEM_CACHE_NAME = 'coreEditItem';
 let _routerEventMap = new Map();
 
-export interface CanComponentDeactivate {
+export interface GdeicCanComponentDeactivate {
     canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;
 }
 
 @Injectable()
-export class GdeicCommonEditGuard implements CanActivate, CanDeactivate {
-    private _isNewItem: any;
-
+export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCanComponentDeactivate>{
     constructor(
         private _router: Router) { }
 
@@ -51,11 +50,20 @@ export class GdeicCommonEditGuard implements CanActivate, CanDeactivate {
         }
     }
 
-    canDeactivate(component: CanComponentDeactivate) {
-        return component.canDeactivate ? component.canDeactivate() : true;
+    canDeactivate(component: GdeicCanComponentDeactivate): Observable<boolean> | Promise<boolean> | boolean {
+        if (component.canDeactivate) {
+            if (component.canDeactivate()) {
+                return true;
+            } else {
+                return new Promise<boolean>(resolve => resolve(window.confirm('是否放弃编辑？')))
+            }
+        } else {
+            return true;
+        }
     }
 
     goNew(currentRoute: ActivatedRoute) {
+        console.log(currentRoute);
         this.goEdit({}, 'new', currentRoute);
     }
 
