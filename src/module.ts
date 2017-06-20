@@ -1,6 +1,7 @@
 // Class
 export * from './module/class/GdeicCommonEdit';
 export * from './module/class/GdeicToggle';
+export * from './module/class/GdeicValidators';
 
 // Component
 export * from './module/component/gdeic-hold-on.component';
