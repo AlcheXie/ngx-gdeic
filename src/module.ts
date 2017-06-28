@@ -4,6 +4,7 @@ export * from './module/class/GdeicToggle';
 export * from './module/class/GdeicValidators';
 
 // Component
+export * from './module/component/gdeic-error.component';
 export * from './module/component/gdeic-hold-on.component';
 
 // Directive

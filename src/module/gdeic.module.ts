@@ -10,6 +10,7 @@ import { GdeicRestful } from './service/gdeic-restful.service';
 import { GdeicCommonEditGuard } from './service/route-guard/gdeic-common-edit-guard.service';
 import { GdeicSysResource } from './service/restful-resource/gdeic-sys.resource';
 
+import { GdeicErrorComponent } from './component/gdeic-error.component';
 import { GdeicHoldOnComponent } from './component/gdeic-hold-on.component';
 
 import { GdeicPreventPropagationDirective } from './directive/gdeic-prevent-propagation.directive';
@@ -28,10 +29,12 @@ import { GdeicPreventPropagationDirective } from './directive/gdeic-prevent-prop
     GdeicSysResource
   ],
   declarations: [
+    GdeicErrorComponent,
     GdeicHoldOnComponent,
     GdeicPreventPropagationDirective
   ],
   exports: [
+    GdeicErrorComponent,
     GdeicHoldOnComponent,
     GdeicPreventPropagationDirective
   ]
