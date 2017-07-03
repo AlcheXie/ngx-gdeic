@@ -55,6 +55,10 @@ export class Gdeic {
         return result;
     }
 
+    static getContextFunction(context, callbackName: string) {
+        return function () { context[callbackName](); }
+    }
+
     static get isFinishInit() {
         return _isFinishInit;
     }

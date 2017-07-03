@@ -5,6 +5,7 @@ import { Gdeic } from '../gdeic.service';
 import { GdeicCache } from '../gdeic-cache.service';
 
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 
 const _EDIT_ITEM_CACHE_NAME = 'coreEditItem';
 let _routerEventMap = new Map();
@@ -15,8 +16,13 @@ export interface GdeicCanComponentDeactivate {
 
 @Injectable()
 export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCanComponentDeactivate>{
+    private _successCallback: Function;
+    submit$ = new Subject<boolean>();
+
     constructor(
-        private _router: Router) { }
+        private _router: Router) {
+        this.submit$.subscribe(() => this._successCallback());
+    }
 
     canActivate(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         let _cache = this.getData();
@@ -62,14 +68,18 @@ export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCan
         }
     }
 
-    goNew(currentRoute: ActivatedRoute) {
-        console.log(currentRoute);
-        this.goEdit({}, 'new', currentRoute);
+    new(currentRoute: ActivatedRoute, successCallback: Function = Gdeic.noop) {
+        this.edit({}, 'new', currentRoute, successCallback);
     }
 
-    goEdit(editItem: any, url: string, currentRoute: ActivatedRoute) {
+    edit(editItem: any, url: string, currentRoute: ActivatedRoute, successCallback: Function = Gdeic.noop) {
         GdeicCache.put(_EDIT_ITEM_CACHE_NAME, Gdeic.copy(editItem));
         this._router.navigate([url], { relativeTo: currentRoute });
+        this._successCallback = successCallback;
+    }
+
+    submit() {
+        this.submit$.next();
     }
 
     getData(): any {
