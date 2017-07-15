@@ -53,6 +53,12 @@ export class Gdeic {
     return result;
   }
 
+  static getContextFunction(context: any, callbackName: string): ((...values: any[]) => any) {
+    return function (...values) {
+      context[callbackName](...values);
+    };
+  }
+
   static finishInit(): void {
     _isFinishInit = true;
     _finishInit$.next(true);

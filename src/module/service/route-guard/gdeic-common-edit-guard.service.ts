@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
-  ActivatedRoute, ActivatedRouteSnapshot,
-  CanActivate, NavigationEnd, Router, RouterStateSnapshot
+  ActivatedRoute, ActivatedRouteSnapshot, CanActivate, CanDeactivate,
+  NavigationEnd, Router, RouterStateSnapshot
 } from '@angular/router';
 
 import { Gdeic } from '../gdeic.service';
@@ -13,8 +13,12 @@ import { Subject } from 'rxjs/Subject';
 const _editItemCacheName = 'coreEditItem';
 const _routerEventMap = new Map();
 
+export interface GdeicCanComponentDeactivate {
+  canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;
+}
+
 @Injectable()
-export class GdeicCommonEditGuard implements CanActivate {
+export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCanComponentDeactivate> {
   private _successCallback: Function;
   submit$ = new Subject<boolean>();
 
@@ -55,17 +59,29 @@ export class GdeicCommonEditGuard implements CanActivate {
     }
   }
 
-  goNew(currentRoute: ActivatedRoute, successCallback: Function = Gdeic.noop) {
-    this.goEdit({}, 'new', currentRoute, successCallback);
+  canDeactivate(component: GdeicCanComponentDeactivate): Observable<boolean> | Promise<boolean> | boolean {
+    if (component.canDeactivate) {
+      if (component.canDeactivate()) {
+        return true;
+      } else {
+        return new Promise<boolean>(resolve => resolve(window.confirm('是否放弃编辑？')));
+      }
+    } else {
+      return true;
+    }
   }
 
-  goEdit(editItem: any, url: string, currentRoute: ActivatedRoute, successCallback: Function = Gdeic.noop) {
+  new(currentRoute: ActivatedRoute, successCallback: Function = Gdeic.noop): void {
+    this.edit({}, 'new', currentRoute, successCallback);
+  }
+
+  edit(editItem: any, url: string, currentRoute: ActivatedRoute, successCallback: Function = Gdeic.noop): void {
     GdeicCache.put(_editItemCacheName, Gdeic.copy(editItem));
     this._router.navigate([url], { relativeTo: currentRoute });
     this._successCallback = successCallback;
   }
 
-  submit() {
+  submit(): void {
     this.submit$.next();
   }
 
@@ -73,7 +89,7 @@ export class GdeicCommonEditGuard implements CanActivate {
     return GdeicCache.get(_editItemCacheName);
   }
 
-  watchRouteChange(url: string, callback: Function) {
+  watchRouteChange(url: string, callback: Function): void {
     let _subscription = _routerEventMap.get(url);
     if (_subscription) {
       _subscription.unsubscribe();

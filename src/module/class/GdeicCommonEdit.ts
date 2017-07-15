@@ -3,7 +3,7 @@ import { NavigationEnd } from '@angular/router';
 import { GdeicCommonEditGuard } from '../service/route-guard/gdeic-common-edit-guard.service';
 
 export class GdeicCommonEdit {
-  protected isMatchUrl = true;
+  isMatchUrl = true;
 
   constructor(
     protected commonEditGuard: GdeicCommonEditGuard,
