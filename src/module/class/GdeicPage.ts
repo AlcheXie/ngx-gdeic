@@ -19,7 +19,7 @@ export class GdeicPage<T> {
     }
 
     constructor(
-        private _source: T[],
+        protected _source: T[],
         itemsPerPage: number = 10) {
         _source = Gdeic.copy(_source.map((x: any, idx) => {
             x.$$index = idx;
@@ -33,7 +33,7 @@ export class GdeicPage<T> {
         this.currentPage = 1;
         this.searchParams = {};
 
-        this.update(this.source);
+        this.update(_source);
     }
 
     paging(pageIndex) {
@@ -47,7 +47,7 @@ export class GdeicPage<T> {
         return this;
     }
 
-    update(pagingList = this.source, isSetSource = false) {
+    update(pagingList = this._source, isSetSource = false) {
         this.pagingList = pagingList;
         this.pagingListLength = this.pagingList.length;
 

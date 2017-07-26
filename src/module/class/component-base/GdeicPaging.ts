@@ -1,7 +1,8 @@
-import { Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { Gdeic } from '../../service/gdeic.service';
 import { GdeicPage } from '../GdeicPage';
+import { GdeicGroup } from '../GdeicGroup';
 
 export class GdeicPaging {
     @Input() size: string = 'sm';
@@ -14,6 +15,8 @@ export class GdeicPaging {
 
     private _isInit: boolean = false;
     private _defaultShowingPages: number[] = [1, 2, 3, 4, 5];
+
+    constructor(protected _elementRef: ElementRef) { }
 
     ngOnChanges(changes: SimpleChanges) {
         let _currVal = changes.pagingModel.currentValue, _prevVal = changes.pagingModel.previousValue;
@@ -46,12 +49,11 @@ export class GdeicPaging {
                         }
                         this.pagingModel.setSource(_source);
                     }
-                } 
-                // else if (this.pagingModel.constructor === GdeicGroup) {
-                //     for (let item of _currVal) {
-                //         this.pagingModel.pagingList[item.$$index].isExpand = item.isExpand;
-                //     }
-                // }
+                } else if (this.pagingModel.constructor === GdeicGroup) {
+                    for (let item of _currVal) {
+                        this.pagingModel.pagingList[item.$$index].isExpand = item.isExpand;
+                    }
+                }
             }
         }
     }

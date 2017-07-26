@@ -1,6 +1,7 @@
 // Class
 export * from './module/class/GdeicToggle';
 export * from './module/class/GdeicPage';
+export * from './module/class/GdeicGroup';
 export * from './module/class/GdeicValidators';
 
 export * from './module/class/component-base/GdeicError';
