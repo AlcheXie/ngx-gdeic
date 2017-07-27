@@ -1,0 +1,6 @@
+<div class="gdeic-holdOn" [hidden]="!isHoldingOn">
+    <div class="gdeic-holdOn-body">
+        <span class="gdeic-loading"></span>
+        <span *ngIf="holdOnText">{{holdOnText + '...'}}</span>
+    </div>
+</div>

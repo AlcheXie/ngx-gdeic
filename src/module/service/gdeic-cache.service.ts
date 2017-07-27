@@ -31,6 +31,10 @@ export class GdeicCache {
         return _cacheMap.get(key);
     }
 
+    static has(key: string): boolean {
+        return _cacheMap.has(key);
+    }
+
     static remove(key: string) {
         _cacheMap.delete(key);
         Gdeic.toggleItem(_cacheKeyList, key);

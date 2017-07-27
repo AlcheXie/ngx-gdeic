@@ -10,6 +10,8 @@ import { GdeicRestful } from './service/gdeic-restful.service';
 import { GdeicCommonEditGuard } from './service/route-guard/gdeic-common-edit-guard.service';
 import { GdeicSysResource } from './service/restful-resource/gdeic-sys.resource';
 
+import { PreventPropagationDirective } from './directive/prevent-propagation.directive';
+
 @NgModule({
     imports: [
         CommonModule,
@@ -23,8 +25,8 @@ import { GdeicSysResource } from './service/restful-resource/gdeic-sys.resource'
         GdeicCommonEditGuard,
         GdeicSysResource
     ],
-    declarations: [],
-    exports: []
+    declarations: [PreventPropagationDirective],
+    exports: [PreventPropagationDirective]
 })
 export class GdeicModule {
     static fooRoot(config: GdeicConfigConfig): ModuleWithProviders {
