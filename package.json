@@ -23,7 +23,6 @@
     "gulp": "^3.9.1",
     "gulp-sass": "^3.1.0",
     "html-loader": "^0.4.5",
-    "linqts": "^1.8.2",
     "raw-loader": "^0.5.1",
     "rxjs": "^5.4.0",
     "ui-gdeic": "^1.0.0",
@@ -36,6 +35,7 @@
     "@angular/forms": "^4.0.0",
     "@angular/http": "^4.0.0",
     "@angular/platform-browser": "^4.0.0",
-    "@angular/router": "^4.0.0"
+    "@angular/router": "^4.0.0",
+    "linqts": "^1.8.2"
   }
 }
