@@ -15,6 +15,7 @@ export * from './module/directive/gdeic-prevent-propagation.directive';
 export * from './module/service/gdeic.service';
 export * from './module/service/gdeic-cache.service';
 export * from './module/service/gdeic-config.service';
+export * from './module/service/gdeic-form.service';
 export * from './module/service/gdeic-restful.service';
 
 export * from './module/service/route-guard/gdeic-common-edit-guard.service';
