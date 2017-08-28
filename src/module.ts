@@ -1,5 +1,6 @@
 // Class
 export * from './module/class/GdeicCommonEdit';
+export * from './module/class/GdeicEdit';
 export * from './module/class/GdeicPulling';
 export * from './module/class/GdeicToggle';
 export * from './module/class/GdeicValidators';
