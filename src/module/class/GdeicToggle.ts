@@ -11,8 +11,13 @@ export class GdeicToggle<T> {
     }
   }
 
-  has(item: T): boolean {
-    return this.items.some(x => Gdeic.toJson(x) === Gdeic.toJson(item));
+  has(item: T | T[]): boolean {
+    if (item.constructor === Array) {
+      const _aJson = this.items.map(x => Gdeic.toJson(x));
+      return (item as T[]).map(x => _aJson.indexOf(Gdeic.toJson(x))).filter(x => x < 0).length === 0;
+    } else {
+      return this.items.some(x => Gdeic.toJson(x) === Gdeic.toJson(item));
+    }
   }
 
   toggle(item: T | T[]): void {
@@ -20,7 +25,9 @@ export class GdeicToggle<T> {
       Gdeic.toggleItem(this.items, itemToToggle);
     };
     if (item.constructor === Array) {
-      (item as T[]).forEach(Gdeic.copy(item), x => _toggleItem(x));
+      Gdeic.copy(item as T[]).forEach(x => {
+        _toggleItem(x);
+      });
     } else {
       _toggleItem(item as T);
     }
@@ -43,7 +50,9 @@ export class GdeicToggle<T> {
 
     if (isCover) {
       this.clear();
-      this.items = itemList;
+      for (const item of itemList) {
+        this.items.push(item);
+      }
     } else {
       for (const item of itemList) {
         if (!this.has(item)) {
@@ -54,6 +63,6 @@ export class GdeicToggle<T> {
   }
 
   clear(): void {
-    this.items = [];
+    this.items.splice(0, this.items.length);
   }
 }
