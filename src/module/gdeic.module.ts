@@ -17,6 +17,8 @@ import { GdeicHoldOnComponent } from './component/gdeic-hold-on.component';
 
 import { GdeicPreventPropagationDirective } from './directive/gdeic-prevent-propagation.directive';
 
+import { GdeicBoolPipe } from './pipe/gdeic-bool.pipe';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -35,13 +37,15 @@ import { GdeicPreventPropagationDirective } from './directive/gdeic-prevent-prop
     GdeicArrayTextComponent,
     GdeicErrorComponent,
     GdeicHoldOnComponent,
-    GdeicPreventPropagationDirective
+    GdeicPreventPropagationDirective,
+    GdeicBoolPipe
   ],
   exports: [
     GdeicArrayTextComponent,
     GdeicErrorComponent,
     GdeicHoldOnComponent,
-    GdeicPreventPropagationDirective
+    GdeicPreventPropagationDirective,
+    GdeicBoolPipe
   ]
 })
 export class GdeicModule {

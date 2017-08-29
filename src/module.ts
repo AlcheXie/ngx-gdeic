@@ -13,6 +13,9 @@ export * from './module/component/gdeic-hold-on.component';
 // Directive
 export * from './module/directive/gdeic-prevent-propagation.directive';
 
+// Pipe
+export * from './module/pipe/gdeic-bool.pipe';
+
 // Service
 export * from './module/service/gdeic.service';
 export * from './module/service/gdeic-cache.service';
