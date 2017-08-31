@@ -42,8 +42,9 @@ export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCan
       } else {
         if (Object.keys(_cache).length === 0) {
           return true;
-        }
-        if ((() => {
+        } else if (_cache.constructor === Array) {
+          return true;
+        } else if ((() => {
           for (const key of Object.keys(childRoute.params)) {
             if (_cache[key].toString() !== childRoute.params[key].toString()) { return false; }
           }
@@ -79,6 +80,10 @@ export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCan
     GdeicCache.put(_editItemCacheName, Gdeic.copy(editItem));
     this._router.navigate([url], { relativeTo: currentRoute });
     this._successCallback = successCallback;
+  }
+
+  multiEdit(editItems: any[], currentRoute: ActivatedRoute, successCallback: Function = Gdeic.noop): void {
+    this.edit(editItems, 'multi', currentRoute, successCallback);
   }
 
   submit(): void {
