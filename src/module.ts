@@ -10,6 +10,7 @@ export * from './module/class/GdeicValidators';
 export * from './module/component/gdeic-array-text.component';
 export * from './module/component/gdeic-error.component';
 export * from './module/component/gdeic-hold-on.component';
+export * from './module/component/gdeic-tree.component';
 
 // Directive
 export * from './module/directive/gdeic-prevent-propagation.directive';

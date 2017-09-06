@@ -14,6 +14,7 @@ import { GdeicSysResource } from './service/restful-resource/gdeic-sys.resource'
 import { GdeicArrayTextComponent } from './component/gdeic-array-text.component';
 import { GdeicErrorComponent } from './component/gdeic-error.component';
 import { GdeicHoldOnComponent } from './component/gdeic-hold-on.component';
+import { GdeicTreeComponent } from './component/gdeic-tree.component';
 
 import { GdeicPreventPropagationDirective } from './directive/gdeic-prevent-propagation.directive';
 
@@ -37,6 +38,7 @@ import { GdeicBoolPipe } from './pipe/gdeic-bool.pipe';
     GdeicArrayTextComponent,
     GdeicErrorComponent,
     GdeicHoldOnComponent,
+    GdeicTreeComponent,
     GdeicPreventPropagationDirective,
     GdeicBoolPipe
   ],
@@ -44,6 +46,7 @@ import { GdeicBoolPipe } from './pipe/gdeic-bool.pipe';
     GdeicArrayTextComponent,
     GdeicErrorComponent,
     GdeicHoldOnComponent,
+    GdeicTreeComponent,
     GdeicPreventPropagationDirective,
     GdeicBoolPipe
   ]
