@@ -17,6 +17,7 @@ export * from './module/component/gdeic-tree.component';
 export * from './module/directive/gdeic-prevent-propagation.directive';
 
 // Interface
+export * from './module/interface/GdeicRestful';
 export * from './module/interface/GdeicSys';
 
 // Pipe

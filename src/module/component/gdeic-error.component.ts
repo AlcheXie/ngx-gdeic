@@ -4,9 +4,10 @@ import {
 } from '@angular/core';
 
 import { GdeicConfig } from '../service/gdeic-config.service';
-import { GdeicRestful, ResultError } from '../service/gdeic-restful.service';
+import { GdeicRestful } from '../service/gdeic-restful.service';
+import { GdeicResultError } from '../interface/GdeicRestful';
 
-import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
@@ -31,23 +32,30 @@ import { Subscription } from 'rxjs/Subscription';
 export class GdeicErrorComponent implements AfterViewInit, OnDestroy {
   @Input()
   set gdeicCloseByBackdrop(value: boolean) {
-    this._gdeicCloseByBackdrop = value;
+    this._closeByBackdrop = value;
   }
-  @Output() gdeicErrorChange = new EventEmitter<ResultError>();
+  @Input()
+  set gdeicErrorSubject(value: Subject<GdeicResultError>) {
+    this._errorSubject = value;
+  }
+  @Output() gdeicErrorChange = new EventEmitter<GdeicResultError>();
 
-  error: ResultError;
   isShowError = false;
-  private _gdeicCloseByBackdrop = false;
-  private _subject$: Subscription;
+  private _closeByBackdrop = false;
+  private _errorSubject: Subject<GdeicResultError>;
+  private _subscription: Subscription;
+  private _error: GdeicResultError;
 
   constructor(
     private _elementRef: ElementRef,
-    private _config: GdeicConfig) {
-    this._subject$ = (GdeicRestful.error$ as Observable<ResultError>)
+    private _config: GdeicConfig
+  ) {
+    const _subject = this._errorSubject || GdeicRestful.error$;
+    this._subscription = _subject
       .subscribe(data => {
         if (this.isShowError) { return; }
         this.isShowError = true;
-        this.error = data;
+        this._error = data;
         this.gdeicErrorChange.emit(data);
       });
   }
@@ -60,20 +68,20 @@ export class GdeicErrorComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._subject$.unsubscribe();
+    this._subscription.unsubscribe();
   }
 
   @HostListener('click', ['$event'])
   onClick($event) {
-    if (!this._gdeicCloseByBackdrop) { return; }
+    if (!this._closeByBackdrop) { return; }
     if ($event.target.className !== 'backdrop') { return; }
     this._clearMsg();
   }
 
   private _clearMsg(): void {
-    if (this.error.StatusCode === -1 && this._config.loginUrl !== undefined) {
+    if (this._error.StatusCode === -1 && this._config.loginUrl !== undefined) {
       window.location.href = this._config.loginUrl;
-    } else if (this.error.StatusCode === 500) {
+    } else if (this._error.StatusCode === 500) {
       window.location.reload();
     }
     this.isShowError = false;

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 
+import { GdeicResultError, GdeicRestfulResource } from '../interface/GdeicRestful';
+
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/observable/throw';
@@ -13,21 +15,12 @@ interface Action {
   method?: string;
 }
 
-export interface GdeicRestfulResource {
-  ResourceName: string;
-}
-
-export interface ResultError {
-  StatusCode: number;
-  ErrorMsg?: string;
-}
-
 const _timeDiff = -((new Date()).getTimezoneOffset() / 60);
 const _paramMethodSet = new Set(['get', 'delete', 'head', 'options']),
   _bodyMethodSet = new Set(['post', 'put', 'patch']);
 
 const _loading$ = new Subject<boolean>(),
-  _error$ = new Subject<ResultError>();
+  _error$ = new Subject<GdeicResultError>();
 
 const _formatResponseData = (data: any) => {
   if (data === undefined || data === null) { return; }
@@ -104,18 +97,16 @@ const _handleError = (rejectMethod: Function) => ((res: Response) => {
 
 @Injectable()
 export class GdeicRestful {
-  constructor() { }
-
-  static get loading$() {
+  static get loading$(): Subject<boolean> {
     return _loading$;
   }
 
-  static get error$() {
+  static get error$(): Subject<GdeicResultError> {
     return _error$;
   }
 
-  static make(actions: Object, instance: GdeicRestfulResource, http: Http) {
-    const _makeResourceMethod = (action: Action): Function => {
+  static make(actions: { [name: string]: Action }, instance: GdeicRestfulResource, http: Http): void {
+    const _makeResourceMethod = (action: Action): ((...values: any[]) => Observable<Response>) => {
       let _method = action.method || 'get';
       _method = _method.toLowerCase();
       if (!_paramMethodSet.has(_method) && !_bodyMethodSet.has(_method)) {
@@ -123,7 +114,7 @@ export class GdeicRestful {
       }
 
       if (_paramMethodSet.has(_method)) {
-        return (search: Object = null): Observable<Response> => {
+        return (search: { [name: string]: any } = null): Observable<Response> => {
           let _url = action.url;
           if (search) {
             for (const key of Object.keys(search)) {
@@ -133,7 +124,7 @@ export class GdeicRestful {
           return http[_method](_url, search);
         };
       } else if (_bodyMethodSet.has(_method)) {
-        return (data: any, search: Object = null): Observable<Response> => {
+        return (data: any, search: { [name: string]: any } = null): Observable<Response> => {
           let _url = action.url;
           if (data.constructor === Object || data.constructor === Array) {
             _formatRequestData(data);

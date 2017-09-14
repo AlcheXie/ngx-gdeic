@@ -1,30 +1,34 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { GdeicRestfulResource, GdeicRestful } from '../../service/gdeic-restful.service';
+import { Http, Response } from '@angular/http';
+
+import { GdeicRestfulResource } from '../../interface/GdeicRestful';
+import { GdeicRestful } from '../../service/gdeic-restful.service';
+
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class GdeicSysResource implements GdeicRestfulResource {
   ResourceName = 'GdeicSysResource';
-  getAccountInfo: Function;
-  getHeader: Function;
-  queryAccount: Function;
-  queryAccountByKeyword: Function;
-  saveAccount: Function;
-  lockAccount: Function;
-  deleteAccount: Function;
-  queryRole: Function;
-  queryRoleAdmin: Function;
-  saveRole: Function;
-  lockRole: Function;
-  deleteRole: Function;
-  queryMenu: Function;
-  getMenuById: Function;
-  saveMenu: Function;
-  lockMenu: Function;
-  deleteMenu: Function;
-  getOuTree: Function;
-  initOutree: Function;
-  queryOuAccounts: Function;
+  getAccountInfo: (...values: any[]) => Observable<Response>;
+  getHeader: (...values: any[]) => Observable<Response>;
+  queryAccount: (...values: any[]) => Observable<Response>;
+  queryAccountByKeyword: (...values: any[]) => Observable<Response>;
+  saveAccount: (...values: any[]) => Observable<Response>;
+  lockAccount: (...values: any[]) => Observable<Response>;
+  deleteAccount: (...values: any[]) => Observable<Response>;
+  queryRole: (...values: any[]) => Observable<Response>;
+  queryRoleAdmin: (...values: any[]) => Observable<Response>;
+  saveRole: (...values: any[]) => Observable<Response>;
+  lockRole: (...values: any[]) => Observable<Response>;
+  deleteRole: (...values: any[]) => Observable<Response>;
+  queryMenu: (...values: any[]) => Observable<Response>;
+  getMenuById: (...values: any[]) => Observable<Response>;
+  saveMenu: (...values: any[]) => Observable<Response>;
+  lockMenu: (...values: any[]) => Observable<Response>;
+  deleteMenu: (...values: any[]) => Observable<Response>;
+  getOuTree: (...values: any[]) => Observable<Response>;
+  initOutree: (...values: any[]) => Observable<Response>;
+  queryOuAccounts: (...values: any[]) => Observable<Response>;
 
   constructor(private _http: Http) {
     GdeicRestful.make({
