@@ -15,6 +15,7 @@ export * from './module/component/gdeic-tree.component';
 
 // Directive
 export * from './module/directive/gdeic-prevent-propagation.directive';
+export * from './module/directive/gdeic-slide-up.directive';
 
 // Interface
 export * from './module/interface/GdeicRestful';

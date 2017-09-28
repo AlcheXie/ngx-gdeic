@@ -18,6 +18,7 @@ import { GdeicLoadingComponent } from './component/gdeic-loading.component';
 import { GdeicTreeComponent } from './component/gdeic-tree.component';
 
 import { GdeicPreventPropagationDirective } from './directive/gdeic-prevent-propagation.directive';
+import { GdeicSlideUpDirective } from './directive/gdeic-slide-up.directive';
 
 import { GdeicBoolPipe } from './pipe/gdeic-bool.pipe';
 
@@ -42,6 +43,7 @@ import { GdeicBoolPipe } from './pipe/gdeic-bool.pipe';
     GdeicLoadingComponent,
     GdeicTreeComponent,
     GdeicPreventPropagationDirective,
+    GdeicSlideUpDirective,
     GdeicBoolPipe
   ],
   exports: [
@@ -51,6 +53,7 @@ import { GdeicBoolPipe } from './pipe/gdeic-bool.pipe';
     GdeicLoadingComponent,
     GdeicTreeComponent,
     GdeicPreventPropagationDirective,
+    GdeicSlideUpDirective,
     GdeicBoolPipe
   ]
 })
