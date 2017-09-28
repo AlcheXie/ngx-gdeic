@@ -86,8 +86,13 @@ export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCan
     this.edit(editItems, 'multi', currentRoute, successCallback);
   }
 
-  submit(): void {
-    this.submit$.next();
+  submit(promise?: Promise<any>): void {
+    if (promise === undefined) {
+      this.submit$.next();
+    } else {
+      promise
+        .then(() => this.submit$.next());
+    }
   }
 
   getData(): any {
