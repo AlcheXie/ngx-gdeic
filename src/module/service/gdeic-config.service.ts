@@ -7,18 +7,22 @@ export class GdeicConfigConfig {
 
 @Injectable()
 export class GdeicConfig {
-  _appTitle: string;
-  _loginUrl: string;
-
+  get GDEIC_APP_ID(): number {
+    return this._GDEIC_APP_ID;
+  }
   get appTitle(): string {
     return this._appTitle;
   }
-
   get loginUrl(): string {
     return this._loginUrl;
   }
 
-  constructor(@Optional() config: GdeicConfigConfig) {
+  private _GDEIC_APP_ID: number;
+  private _appTitle: string;
+  private _loginUrl: string;
+
+  constructor( @Optional() config: GdeicConfigConfig) {
+    this._GDEIC_APP_ID = (new Date()).getTime();
     if (config) {
       this._appTitle = config.appTitle;
       this._loginUrl = config.loginUrl;
