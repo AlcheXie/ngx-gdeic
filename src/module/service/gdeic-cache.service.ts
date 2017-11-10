@@ -2,48 +2,48 @@ import { Injectable } from '@angular/core';
 
 import { Gdeic } from './gdeic.service';
 
-const _cacheKeyList = [],
-  _cacheMap = new Map();
-
 @Injectable()
 export class GdeicCache {
-  static put(key: string, value: any): void {
-    _cacheMap.set(key, value);
-    Gdeic.toggleItem(_cacheKeyList, key);
+  private _cacheKeys: string[] = [];
+  private _cacheMap: Map<string, any> = new Map();
+
+  put(key: string, value: any): void {
+    this._cacheMap.set(key, value);
+    Gdeic.toggleItem(this._cacheKeys, key);
   }
 
-  static putAsync(key: string, promise: Promise<any>): Promise<any> {
+  putAsync(key: string, promise: Promise<any>): Promise<any> {
     return new Promise((resolve, reject) => {
       promise
         .then(data => {
-          GdeicCache.put(key, data);
+          this.put(key, data);
           resolve(data);
         }, reject);
     });
   }
 
-  static get(key: string): any {
-    return _cacheMap.get(key);
+  get(key: string): any {
+    return this._cacheMap.get(key);
   }
 
-  static has(key: string): boolean {
-    return _cacheMap.has(key);
+  has(key: string): boolean {
+    return this._cacheMap.has(key);
   }
 
-  static remove(key: string): void {
-    _cacheMap.delete(key);
-    Gdeic.toggleItem(_cacheKeyList, key);
+  remove(key: string): void {
+    this._cacheMap.delete(key);
+    Gdeic.toggleItem(this._cacheKeys, key);
   }
 
-  static removeAll(): void {
-    _cacheMap.clear();
-    _cacheKeyList.splice(0, _cacheKeyList.length);
+  removeAll(): void {
+    this._cacheMap.clear();
+    this._cacheKeys.splice(0, this._cacheKeys.length);
   }
 
-  static info(): { size: number, keys: string[] } {
+  info(): { size: number, keys: string[] } {
     return {
-      size: _cacheMap.size,
-      keys: _cacheKeyList
+      size: this._cacheMap.size,
+      keys: this._cacheKeys
     };
   }
 }

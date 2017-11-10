@@ -1,6 +1,6 @@
 import { Gdeic } from '../service/gdeic.service';
-import { GdeicRestful } from '../service/gdeic-restful.service';
-import { GdeicSysResource } from '../service/restful-resource/gdeic-sys.resource';
+import { GDEIC_RESTFUL } from '../service/gdeic-restful.service';
+import { GDEIC_SYS_RESOURCE } from '../service/restful-resource/gdeic-sys.resource';
 import * as GdeicSys from '../interface/GdeicSys';
 
 export class GdeicAccountRole {
@@ -8,13 +8,10 @@ export class GdeicAccountRole {
   Roles: GdeicSys.GdeicRole[];
   ManageOu: GdeicSys.GdeicManageOu;
   LockoutEnabled: boolean;
-  private _gdeicSysResource: GdeicSysResource;
 
   constructor(
-    account: GdeicSys.GdeicAccount | GdeicSys.GdeicAccount[],
-    gdeicSysResource: GdeicSysResource
+    account: GdeicSys.GdeicAccount | GdeicSys.GdeicAccount[]
   ) {
-    this._gdeicSysResource = gdeicSysResource;
     if (account.constructor === Array) {
       const _accounts = account as GdeicSys.GdeicAccount[];
       if (_accounts.length === 0) {
@@ -49,6 +46,6 @@ export class GdeicAccountRole {
         account.LockoutEnabled = this.LockoutEnabled;
       }
     }
-    return GdeicRestful.getPromise(this._gdeicSysResource.saveAccount(_accounts), true);
+    return GDEIC_RESTFUL.getPromise(GDEIC_SYS_RESOURCE.saveAccount(_accounts));
   }
 }

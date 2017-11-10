@@ -2,34 +2,11 @@ import { Injectable } from '@angular/core';
 
 import { Subject } from 'rxjs/Subject';
 
-const _finishInit$ = new Subject<boolean>();
-
-let _isFinishInit = false;
-const _remove$Char = (data: any): void => {
-  if (data === undefined || data === null) { return; }
-  if (data.constructor === Array) {
-    for (const value of data) {
-      if (value.constructor === Object || value.constructor === Array) {
-        _remove$Char(value);
-      }
-    }
-  } else if (data.constructor === Object) {
-    for (const key of Object.keys(data)) {
-      if (/^\$/.test(key)) {
-        delete data[key];
-        continue;
-      }
-      const _value = data[key];
-      if (_value === undefined || _value === null) { continue; }
-      if (_value.constructor === Object || _value.constructor === Array) {
-        _remove$Char(_value);
-      }
-    }
-  }
-};
-
 @Injectable()
 export class Gdeic {
+  private _finishInit$ = new Subject<boolean>();
+  private _isFinishInit = false;
+
   static noop = function () { };
 
   static copy(source: any): any {
@@ -43,13 +20,13 @@ export class Gdeic {
 
   static toJson(source: any): string {
     source = Gdeic.copy(source);
-    _remove$Char(source);
+    Gdeic._remove$Char(source);
     return JSON.stringify(source);
   }
 
   static fromJson(json: string): any {
     const result = JSON.parse(json);
-    _remove$Char(result);
+    Gdeic._remove$Char(result);
     return result;
   }
 
@@ -57,24 +34,6 @@ export class Gdeic {
     return function (...values) {
       context[callbackName](...values);
     };
-  }
-
-  static finishInit(): void {
-    _isFinishInit = true;
-    _finishInit$.next(true);
-  }
-
-  static doAfterInit(callback: Function = Gdeic.noop): void {
-    if (!_isFinishInit) {
-      _finishInit$.subscribe(data => {
-        if (data === true) {
-          callback();
-          _finishInit$.unsubscribe();
-        }
-      });
-    } else {
-      callback();
-    }
   }
 
   static toggleItem(source: any[] = [], item: any, property?: string): boolean {
@@ -97,5 +56,46 @@ export class Gdeic {
       source.push(_oToggle);
     }
     return true;
+  }
+
+  private static _remove$Char = (data: any): void => {
+    if (data === undefined || data === null) { return; }
+    if (data.constructor === Array) {
+      for (const value of data) {
+        if (value.constructor === Object || value.constructor === Array) {
+          Gdeic._remove$Char(value);
+        }
+      }
+    } else if (data.constructor === Object) {
+      for (const key of Object.keys(data)) {
+        if (/^\$/.test(key)) {
+          delete data[key];
+          continue;
+        }
+        const _value = data[key];
+        if (_value === undefined || _value === null) { continue; }
+        if (_value.constructor === Object || _value.constructor === Array) {
+          Gdeic._remove$Char(_value);
+        }
+      }
+    }
+  }
+
+  finishInit(): void {
+    this._isFinishInit = true;
+    this._finishInit$.next(true);
+  }
+
+  doAfterInit(callback: Function = Gdeic.noop): void {
+    if (!this._isFinishInit) {
+      this._finishInit$.subscribe(data => {
+        if (data === true) {
+          callback();
+          this._finishInit$.unsubscribe();
+        }
+      });
+    } else {
+      callback();
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { Gdeic } from '../service/gdeic.service';
-import { GdeicRestful } from '../service/gdeic-restful.service';
+import { GDEIC_RESTFUL } from '../service/gdeic-restful.service';
 
 export class GdeicEdit {
   private _source: any[];
@@ -33,6 +33,6 @@ export class GdeicEdit {
     } else {
       _data = this._source;
     }
-    return Promise.all(_data.map(x => GdeicRestful.getPromise(action(x), true)));
+    return Promise.all(_data.map(x => GDEIC_RESTFUL.getPromise(action(x), true)));
   }
 }

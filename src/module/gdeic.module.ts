@@ -1,11 +1,9 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpModule } from '@angular/http';
 
 import { Gdeic } from './service/gdeic.service';
 import { GdeicCache } from './service/gdeic-cache.service';
 import { GdeicConfig, GdeicConfigConfig } from './service/gdeic-config.service';
-import { GdeicForm } from './service/gdeic-form.service';
 import { GdeicRestful } from './service/gdeic-restful.service';
 
 import { GdeicCommonEditGuard } from './service/route-guard/gdeic-common-edit-guard.service';
@@ -24,17 +22,7 @@ import { GdeicBoolPipe } from './pipe/gdeic-bool.pipe';
 
 @NgModule({
   imports: [
-    CommonModule,
-    HttpModule
-  ],
-  providers: [
-    Gdeic,
-    GdeicCache,
-    GdeicConfig,
-    GdeicForm,
-    GdeicRestful,
-    GdeicCommonEditGuard,
-    GdeicSysResource
+    CommonModule
   ],
   declarations: [
     GdeicArrayTextComponent,
@@ -57,13 +45,39 @@ import { GdeicBoolPipe } from './pipe/gdeic-bool.pipe';
     GdeicBoolPipe
   ]
 })
+export class GdeicCommonModule { }
+
+@NgModule({
+  imports: [
+    CommonModule,
+    GdeicCommonModule
+  ],
+  providers: [
+    Gdeic,
+    GdeicCache,
+    GdeicConfig,
+    GdeicCommonEditGuard,
+    GdeicRestful,
+    GdeicSysResource
+  ],
+  exports: [
+    GdeicCommonModule
+  ]
+})
 export class GdeicModule {
-  static fooRoot(config: GdeicConfigConfig): ModuleWithProviders {
+  static forRoot(config: GdeicConfigConfig): ModuleWithProviders {
     return {
       ngModule: GdeicModule,
       providers: [
         { provide: GdeicConfigConfig, useValue: config }
       ]
     };
+  }
+
+  constructor(@Optional() @SkipSelf() parentModule: GdeicModule) {
+    if (parentModule) {
+      throw new Error(
+        'GdeicModule is already loaded. Import it in the AppModule only');
+    }
   }
 }

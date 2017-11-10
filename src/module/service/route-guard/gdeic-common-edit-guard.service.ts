@@ -23,7 +23,9 @@ export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCan
   submit$ = new Subject<boolean>();
 
   constructor(
-    private _router: Router) {
+    private _router: Router,
+    private _cache: GdeicCache
+  ) {
     this.submit$.subscribe(() => this._successCallback());
   }
 
@@ -77,7 +79,7 @@ export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCan
   }
 
   edit(editItem: any, url: string, currentRoute: ActivatedRoute, successCallback: Function = Gdeic.noop): void {
-    GdeicCache.put(_editItemCacheName, Gdeic.copy(editItem));
+    this._cache.put(_editItemCacheName, Gdeic.copy(editItem));
     this._router.navigate([url], { relativeTo: currentRoute });
     this._successCallback = successCallback;
   }
@@ -96,7 +98,7 @@ export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCan
   }
 
   getData(): any {
-    return GdeicCache.get(_editItemCacheName);
+    return this._cache.get(_editItemCacheName);
   }
 
   watchRouteChange(url: string, callback: Function): void {
@@ -112,7 +114,7 @@ export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCan
           } else if (data.url.indexOf(url) < 0) {
             _subscription.unsubscribe();
             _routerEventMap.delete(url);
-            GdeicCache.remove(_editItemCacheName);
+            this._cache.remove(_editItemCacheName);
           } else {
             callback(data);
           }

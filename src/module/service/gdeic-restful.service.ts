@@ -15,105 +15,33 @@ interface Action {
   method?: string;
 }
 
-const _timeDiff = -((new Date()).getTimezoneOffset() / 60);
-const _paramMethodSet = new Set(['get', 'delete', 'head', 'options']),
-  _bodyMethodSet = new Set(['post', 'put', 'patch']);
-
-const _loading$ = new Subject<boolean>(),
-  _error$ = new Subject<GdeicResultError>();
-
-const _formatResponseData = (data: any) => {
-  if (data === undefined || data === null) { return; }
-  if (data.constructor === Array) {
-    for (const value of data) {
-      if (value.constructor === Object || value.constructor === Array) {
-        _formatResponseData(value);
-      }
-    }
-  } else if (data.constructor === Object) {
-    for (const key of Object.keys(data)) {
-      let value = data[key];
-      if (value === undefined || value === null) { continue; }
-      if (value.constructor === String && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(value)) {
-        if (value === '1900-01-01T00:00:00' || value === '0001-01-01T00:00:00') {
-          delete data[key];
-        } else {
-          if (/T\d{2}:\d{2}:\d{2}$/.test(value)) {
-            value = `${value}.000Z`;
-          }
-          data[key] = (new Date(value)).addHours(-_timeDiff);
-        }
-      } else if (value.constructor === Object || value.constructor === Array) {
-        _formatResponseData(value);
-      }
-    }
-  }
-};
-const _formatRequestData = (data: any) => {
-  if (data === undefined || data === null) { return; }
-  if (data.constructor === Array) {
-    for (const value of data) {
-      if (value.constructor === Object || value.constructor === Array) {
-        _formatRequestData(value);
-      }
-    }
-  } else if (data.constructor === Object) {
-    for (const key of Object.keys(data)) {
-      const _value = data[key];
-      if (_value === undefined || _value === null) { continue; }
-      if (_value.constructor === Date) {
-        data[key] = _value.addHours(_timeDiff);
-      } else if (_value.constructor === Object || _value.constructor === Array) {
-        _formatRequestData(_value);
-      }
-    }
-  }
-};
-
-const _extractData = (rejectMethod: Function) => ((res: Response) => {
-  const _body = res.json();
-  if (_body.StatusCode === 0) {
-    _formatResponseData(_body.Data);
-    _loading$.next(false);
-    return _body.Data || {};
-  } else {
-    _error$.next({ StatusCode: _body.StatusCode, ErrorMsg: _body.ErrorMsg });
-    _loading$.next(false);
-    return rejectMethod(_body.ErrorMsg);
-  }
-});
-const _handleError = (rejectMethod: Function) => ((res: Response) => {
-  _loading$.next(false);
-  let _message;
-  try {
-    _message = res.json().Message;
-  } catch (error) {
-    _message = res.statusText;
-  }
-  const _error = { StatusCode: +res.status, ErrorMsg: _message };
-  _error$.next(_error);
-  return rejectMethod(_error);
-});
+export let GDEIC_RESTFUL: GdeicRestful;
 
 @Injectable()
 export class GdeicRestful {
-  static get loading$(): Subject<boolean> {
-    return _loading$;
+  private static _timeDiff = -((new Date()).getTimezoneOffset() / 60);
+  private static _paramMethodSet: Set<string> = new Set(['get', 'delete', 'head', 'options']);
+  private static _bodyMethodSet: Set<string> = new Set(['post', 'put', 'patch']);
+
+  get loading$(): Subject<boolean> {
+    return this._loading$;
+  }
+  get error$(): Subject<GdeicResultError> {
+    return this._error$;
   }
 
-  static get error$(): Subject<GdeicResultError> {
-    return _error$;
-  }
+  private _loading$: Subject<boolean> = new Subject<boolean>();
+  private _error$: Subject<GdeicResultError> = new Subject<GdeicResultError>();
 
   static make(actions: { [name: string]: Action }, instance: GdeicRestfulResource, http: Http): void {
     const _makeResourceMethod = (action: Action): ((...values: any[]) => Observable<Response>) => {
       let _method = action.method || 'get';
       _method = _method.toLowerCase();
-      if (!_paramMethodSet.has(_method) && !_bodyMethodSet.has(_method)) {
+      if (!GdeicRestful._paramMethodSet.has(_method) && !GdeicRestful._bodyMethodSet.has(_method)) {
         _method = 'get';
       }
 
-      if (_paramMethodSet.has(_method)) {
+      if (GdeicRestful._paramMethodSet.has(_method)) {
         return (search: { [name: string]: any } = null): Observable<Response> => {
           let _url = action.url;
           if (search) {
@@ -123,11 +51,11 @@ export class GdeicRestful {
           }
           return http[_method](_url, search);
         };
-      } else if (_bodyMethodSet.has(_method)) {
+      } else if (GdeicRestful._bodyMethodSet.has(_method)) {
         return (data: any, search: { [name: string]: any } = null): Observable<Response> => {
           let _url = action.url;
           if (data.constructor === Object || data.constructor === Array) {
-            _formatRequestData(data);
+            GdeicRestful._formatRequestData(data);
           }
           if (search) {
             for (const key of Object.keys(search)) {
@@ -144,17 +72,98 @@ export class GdeicRestful {
     }
   }
 
-  static getObservable(observable: Observable<Response>, isHoldOn: boolean = false): Observable<any> {
-    if (isHoldOn) { _loading$.next(true); }
-    return observable
-      .map(_extractData(Observable.throw))
-      .catch(_handleError(Observable.throw));
+  private static _formatResponseData(data: any): void {
+    if (data === undefined || data === null) { return; }
+    if (data.constructor === Array) {
+      for (const value of data) {
+        if (value.constructor === Object || value.constructor === Array) {
+          GdeicRestful._formatResponseData(value);
+        }
+      }
+    } else if (data.constructor === Object) {
+      for (const key of Object.keys(data)) {
+        let value = data[key];
+        if (value === undefined || value === null) { continue; }
+        if (value.constructor === String && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(value)) {
+          if (value === '1900-01-01T00:00:00' || value === '0001-01-01T00:00:00') {
+            delete data[key];
+          } else {
+            if (/T\d{2}:\d{2}:\d{2}$/.test(value)) {
+              value = `${value}.000Z`;
+            }
+            data[key] = (new Date(value)).addHours(-GdeicRestful._timeDiff);
+          }
+        } else if (value.constructor === Object || value.constructor === Array) {
+          GdeicRestful._formatResponseData(value);
+        }
+      }
+    }
   }
 
-  static getPromise(observable: Observable<Response>, isHoldOn: boolean = false): Promise<any> {
-    if (isHoldOn) { _loading$.next(true); }
+  private static _formatRequestData(data: any): void {
+    if (data === undefined || data === null) { return; }
+    if (data.constructor === Array) {
+      for (const value of data) {
+        if (value.constructor === Object || value.constructor === Array) {
+          GdeicRestful._formatRequestData(value);
+        }
+      }
+    } else if (data.constructor === Object) {
+      for (const key of Object.keys(data)) {
+        const _value = data[key];
+        if (_value === undefined || _value === null) { continue; }
+        if (_value.constructor === Date) {
+          data[key] = _value.addHours(GdeicRestful._timeDiff);
+        } else if (_value.constructor === Object || _value.constructor === Array) {
+          GdeicRestful._formatRequestData(_value);
+        }
+      }
+    }
+  }
+
+  constructor() { GDEIC_RESTFUL = this; }
+
+  getObservable(observable: Observable<Response>, isHoldOn: boolean = false): Observable<any> {
+    if (isHoldOn) { this._loading$.next(true); }
+    return observable
+      .map(this._extractData(Observable.throw))
+      .catch(this._handleError(Observable.throw));
+  }
+
+  getPromise(observable: Observable<Response>, isHoldOn: boolean = false): Promise<any> {
+    if (isHoldOn) { this._loading$.next(true); }
     return observable.toPromise()
-      .then(_extractData(Promise.reject))
-      .catch(_handleError(Promise.reject));
+      .then(this._extractData(Promise.reject))
+      .catch(this._handleError(Promise.reject));
+  }
+
+  private _extractData(rejectMethod: Function): ((res: Response) => any) {
+    return (res: Response) => {
+      const _body = res.json();
+      if (_body.StatusCode === 0) {
+        GdeicRestful._formatResponseData(_body.Data);
+        this._loading$.next(false);
+        return _body.Data || {};
+      } else {
+        this._error$.next({ StatusCode: _body.StatusCode, ErrorMsg: _body.ErrorMsg });
+        this._loading$.next(false);
+        return rejectMethod(_body.ErrorMsg);
+      }
+    };
+  }
+
+  private _handleError(rejectMethod: Function): ((res: Response) => any) {
+    return (res: Response) => {
+      this._loading$.next(false);
+      let _message;
+      try {
+        _message = res.json().Message;
+      } catch (error) {
+        _message = res.statusText;
+      }
+      const _error = { StatusCode: +res.status, ErrorMsg: _message };
+      this._error$.next(_error);
+      return rejectMethod(_error);
+    };
   }
 }

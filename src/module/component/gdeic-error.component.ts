@@ -48,9 +48,10 @@ export class GdeicErrorComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private _elementRef: ElementRef,
-    private _config: GdeicConfig
+    private _config: GdeicConfig,
+    private _restful: GdeicRestful
   ) {
-    const _subject = this._errorSubject || GdeicRestful.error$;
+    const _subject = this._errorSubject || this._restful.error$;
     this._subscription = _subject
       .subscribe(data => {
         if (this.isShowError) { return; }

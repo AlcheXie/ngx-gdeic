@@ -6,6 +6,8 @@ import { GdeicRestful } from '../../service/gdeic-restful.service';
 
 import { Observable } from 'rxjs/Observable';
 
+export let GDEIC_SYS_RESOURCE: GdeicSysResource;
+
 @Injectable()
 export class GdeicSysResource implements GdeicRestfulResource {
   ResourceName = 'GdeicSysResource';
@@ -113,5 +115,6 @@ export class GdeicSysResource implements GdeicRestfulResource {
         method: 'GET'
       }
     }, this, _http);
+    GDEIC_SYS_RESOURCE = this;
   }
 }
