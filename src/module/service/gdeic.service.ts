@@ -13,6 +13,22 @@ export class Gdeic {
     const _json = JSON.stringify(source);
     if (source.constructor === Date) {
       return new Date(JSON.parse(_json));
+    } else if (source.constructor === Array || source.constructor === Object) {
+      let _result = JSON.parse(_json);
+      const _remainFunc = (source, result) => {
+        for (const key of Object.keys(source)) {
+          if (source[key] !== undefined && source[key] !== null) {
+            if (source[key].constructor === Function) {
+              result[key] = source[key];
+            }
+            if (source[key].constructor === Array || source.constructor === Object) {
+              _remainFunc(source[key], result[key]);
+            }
+          }
+        }
+      }
+      _remainFunc(source, _result);
+      return _result;
     } else {
       return JSON.parse(_json);
     }
