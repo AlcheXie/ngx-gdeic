@@ -1,6 +1,6 @@
 {
   "name": "ngx-gdeic",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "",
   "main": "bundles/ngx-gdeic.umd.js",
   "scripts": {
@@ -17,18 +17,18 @@
   },
   "homepage": "https://github.com/AlcheXie/ngx-gdeic#readme",
   "dependencies": {
-    "@angular/common": "^4.0.0",
-    "@angular/core": "^4.0.0",
-    "@angular/forms": "^4.0.0",
-    "@angular/http": "^4.0.0",
-    "@angular/platform-browser": "^4.0.0",
-    "@angular/router": "^4.0.0",
-    "rxjs": "^5.4.0",
-    "zone.js": "^0.8.11"
+    "@angular/common": "^5.0.0",
+    "@angular/core": "^5.0.0",
+    "@angular/forms": "^5.0.0",
+    "@angular/http": "^5.0.0",
+    "@angular/platform-browser": "^5.0.0",
+    "@angular/router": "^5.0.0",
+    "rxjs": "^5.5.2",
+    "zone.js": "^0.8.14"
   },
   "devDependencies": {
     "awesome-typescript-loader": "^3.1.3",
-    "codelyzer": "^3.1.2",
+    "codelyzer": "^4.0.1",
     "html-loader": "^0.4.5",
     "raw-loader": "^0.5.1",
     "ui-gdeic": "^1.0.0",
