@@ -17,16 +17,16 @@ interface Action {
   url: string;
   method?: string;
   headers?: HttpHeaders | { [header: string]: string | string[]; };
-  observe?: string; //'body' | 'events' | 'response';
+  observe?: string; // 'body' | 'events' | 'response';
   params?: HttpParams | { [param: string]: string | string[]; };
   reportProgress?: boolean;
-  responseType?: string; //'arraybuffer' | 'blob' | 'json' | 'text';
+  responseType?: string; // 'arraybuffer' | 'blob' | 'json' | 'text';
   withCredentials?: boolean;
   callbackParam?: string;
   retry?: number;
 }
 
-export let GDEIC_RESTFUL: GdeicRestful;
+export let GDEIC_RESTFUL = 'GDEIC_RESTFUL';
 
 @Injectable()
 export class GdeicRestful {
@@ -137,7 +137,13 @@ export class GdeicRestful {
 
   constructor(
     private _httpClient: HttpClient
-  ) { GDEIC_RESTFUL = this; }
+  ) {
+    Object.defineProperty(window, GDEIC_RESTFUL, {
+      value: this,
+      writable: false,
+      enumerable: false
+    });
+  }
 
   getObservable(observable: Observable<any>, isHoldOn: boolean = false): Observable<any> {
     if (isHoldOn) {

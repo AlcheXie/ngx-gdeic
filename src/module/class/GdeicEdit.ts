@@ -20,7 +20,7 @@ export class GdeicEdit {
     return Promise.all(this._source.map(x => Promise.resolve(method(x))));
   }
 
-  fireAction(action: Function, params?: { [name: string]: string } | boolean): Promise<any[]> {
+  fireAction(action: Function, params?: { [name: string]: string } | true): Promise<any[]> {
     let _data;
     if (params !== true) {
       _data = this._source.map(x => {
@@ -33,6 +33,6 @@ export class GdeicEdit {
     } else {
       _data = this._source;
     }
-    return Promise.all(_data.map(x => GDEIC_RESTFUL.getPromise(action(x), true)));
+    return Promise.all(_data.map(x => window[GDEIC_RESTFUL].getPromise(action(x), true)));
   }
 }

@@ -6,7 +6,7 @@ import { GdeicRestful } from '../../service/gdeic-restful.service';
 
 import { Observable } from 'rxjs/Observable';
 
-export let GDEIC_SYS_RESOURCE: GdeicSysResource | GdeicSysNewResource;
+export const GDEIC_SYS_RESOURCE = 'GDEIC_SYS_RESOURCE';
 
 interface GdeicSysResourceMethods {
   getAccountInfo: () => Observable<any>;
@@ -142,7 +142,11 @@ export class GdeicSysResource implements GdeicRestfulResource, GdeicSysResourceM
     private _http: Http
   ) {
     GdeicRestful.make(_actions, this, _http);
-    GDEIC_SYS_RESOURCE = this;
+    Object.defineProperty(window, GDEIC_SYS_RESOURCE, {
+      value: this,
+      writable: false,
+      enumerable: false
+    });
   }
 }
 
@@ -174,6 +178,10 @@ export class GdeicSysNewResource implements GdeicRestfulResource {
     private _gdeicRestful: GdeicRestful
   ) {
     _gdeicRestful.make(_actions, this);
-    GDEIC_SYS_RESOURCE = this;
+    Object.defineProperty(window, GDEIC_SYS_RESOURCE, {
+      value: this,
+      writable: false,
+      enumerable: false
+    });
   }
 }

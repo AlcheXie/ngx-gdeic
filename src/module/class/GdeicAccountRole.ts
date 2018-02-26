@@ -46,6 +46,6 @@ export class GdeicAccountRole {
         account.LockoutEnabled = this.LockoutEnabled;
       }
     }
-    return GDEIC_RESTFUL.getPromise(GDEIC_SYS_RESOURCE.saveAccount(_accounts));
+    return window[GDEIC_RESTFUL].getPromise(window[GDEIC_SYS_RESOURCE].saveAccount(_accounts));
   }
 }
