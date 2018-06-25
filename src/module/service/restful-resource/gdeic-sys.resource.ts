@@ -116,27 +116,27 @@ const _actions = {
 
 @Injectable()
 export class GdeicSysResource implements GdeicRestfulResource, GdeicSysResourceMethods {
-  ResourceName = 'GdeicSysResource';
-  getAccountInfo: () => Observable<Response>;
-  getHeader: () => Observable<Response>;
-  queryAccount: () => Observable<Response>;
-  queryAccountByKeyword: (params: { keyword: string }) => Observable<Response>;
-  saveAccount: (body: any) => Observable<Response>;
-  lockAccount: (params: { uid: number }) => Observable<Response>;
-  deleteAccount: (params: { uid: number }) => Observable<Response>;
-  queryRole: () => Observable<Response>;
-  queryRoleAdmin: () => Observable<Response>;
-  saveRole: (body: any) => Observable<Response>;
-  lockRole: (params: { roleId: number }) => Observable<Response>;
-  deleteRole: (params: { roleId: number }) => Observable<Response>;
-  queryMenu: () => Observable<Response>;
-  getMenuById: (params: { menuId: number }) => Observable<Response>;
-  saveMenu: (body: any) => Observable<Response>;
-  lockMenu: (params: { menuId: number }) => Observable<Response>;
-  deleteMenu: (params: { menuId: number }) => Observable<Response>;
-  getOuTree: () => Observable<Response>;
-  initOutree: () => Observable<Response>;
-  queryOuAccounts: (params: { ouId: number }) => Observable<Response>;
+  readonly ResourceName = 'GdeicSysResource';
+  readonly getAccountInfo: () => Observable<Response>;
+  readonly getHeader: () => Observable<Response>;
+  readonly queryAccount: () => Observable<Response>;
+  readonly queryAccountByKeyword: (params: { keyword: string }) => Observable<Response>;
+  readonly saveAccount: (body: any) => Observable<Response>;
+  readonly lockAccount: (params: { uid: number }) => Observable<Response>;
+  readonly deleteAccount: (params: { uid: number }) => Observable<Response>;
+  readonly queryRole: () => Observable<Response>;
+  readonly queryRoleAdmin: () => Observable<Response>;
+  readonly saveRole: (body: any) => Observable<Response>;
+  readonly lockRole: (params: { roleId: number }) => Observable<Response>;
+  readonly deleteRole: (params: { roleId: number }) => Observable<Response>;
+  readonly queryMenu: () => Observable<Response>;
+  readonly getMenuById: (params: { menuId: number }) => Observable<Response>;
+  readonly saveMenu: (body: any) => Observable<Response>;
+  readonly lockMenu: (params: { menuId: number }) => Observable<Response>;
+  readonly deleteMenu: (params: { menuId: number }) => Observable<Response>;
+  readonly getOuTree: () => Observable<Response>;
+  readonly initOutree: () => Observable<Response>;
+  readonly queryOuAccounts: (params: { ouId: number }) => Observable<Response>;
 
   constructor(
     private _http: Http
@@ -152,27 +152,27 @@ export class GdeicSysResource implements GdeicRestfulResource, GdeicSysResourceM
 
 @Injectable()
 export class GdeicSysNewResource implements GdeicRestfulResource {
-  ResourceName = 'GdeicSysNewResource';
-  getAccountInfo: () => Observable<any>;
-  getHeader: () => Observable<any>;
-  queryAccount: () => Observable<any>;
-  queryAccountByKeyword: (params: { keyword: string }) => Observable<any>;
-  saveAccount: (body: any) => Observable<any>;
-  lockAccount: (params: { uid: number }) => Observable<any>;
-  deleteAccount: (params: { uid: number }) => Observable<any>;
-  queryRole: () => Observable<any>;
-  queryRoleAdmin: () => Observable<any>;
-  saveRole: (body) => Observable<any>;
-  lockRole: (params: { roleId: number }) => Observable<any>;
-  deleteRole: (params: { roleId: number }) => Observable<any>;
-  queryMenu: () => Observable<any>;
-  getMenuById: (params: { menuId: number }) => Observable<any>;
-  saveMenu: (body) => Observable<any>;
-  lockMenu: (params: { menuId: number }) => Observable<any>;
-  deleteMenu: (params: { menuId: number }) => Observable<any>;
-  getOuTree: () => Observable<any>;
-  initOutree: () => Observable<any>;
-  queryOuAccounts: (params: { ouId: number }) => Observable<any>;
+  readonly ResourceName = 'GdeicSysNewResource';
+  readonly getAccountInfo: () => Observable<any>;
+  readonly getHeader: () => Observable<any>;
+  readonly queryAccount: () => Observable<any>;
+  readonly queryAccountByKeyword: (params: { keyword: string }) => Observable<any>;
+  readonly saveAccount: (body: any) => Observable<any>;
+  readonly lockAccount: (params: { uid: number }) => Observable<any>;
+  readonly deleteAccount: (params: { uid: number }) => Observable<any>;
+  readonly queryRole: () => Observable<any>;
+  readonly queryRoleAdmin: () => Observable<any>;
+  readonly saveRole: (body) => Observable<any>;
+  readonly lockRole: (params: { roleId: number }) => Observable<any>;
+  readonly deleteRole: (params: { roleId: number }) => Observable<any>;
+  readonly queryMenu: () => Observable<any>;
+  readonly getMenuById: (params: { menuId: number }) => Observable<any>;
+  readonly saveMenu: (body) => Observable<any>;
+  readonly lockMenu: (params: { menuId: number }) => Observable<any>;
+  readonly deleteMenu: (params: { menuId: number }) => Observable<any>;
+  readonly getOuTree: () => Observable<any>;
+  readonly initOutree: () => Observable<any>;
+  readonly queryOuAccounts: (params: { ouId: number }) => Observable<any>;
 
   constructor(
     private _gdeicRestful: GdeicRestful

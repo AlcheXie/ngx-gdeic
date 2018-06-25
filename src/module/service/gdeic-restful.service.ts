@@ -36,16 +36,10 @@ export class GdeicRestful {
   private static _observeSet: Set<string> = new Set(['body', 'events', 'response']);
   private static _responseTypeSet: Set<string> = new Set(['arraybuffer', 'blob', 'json', 'text']);
 
-  get loading$(): Subject<boolean> {
-    return this._loading$;
-  }
-  get error$(): Subject<GdeicResultError> {
-    return this._error$;
-  }
+  readonly loading$: Subject<boolean> = new Subject<boolean>();
+  readonly error$: Subject<GdeicResultError> = new Subject<GdeicResultError>();
 
   private _isLoading = false;
-  private _loading$: Subject<boolean> = new Subject<boolean>();
-  private _error$: Subject<GdeicResultError> = new Subject<GdeicResultError>();
 
   static make(actions: { [name: string]: Action }, instance: GdeicRestfulResource, http: Http): void {
     const _makeResourceMethod = (action: Action): ((...values: any[]) => Observable<Response>) => {
@@ -148,7 +142,7 @@ export class GdeicRestful {
   getObservable(observable: Observable<any>, isHoldOn: boolean = false): Observable<any> {
     if (isHoldOn) {
       this._isLoading = true;
-      this._loading$.next(true);
+      this.loading$.next(true);
     }
     return observable
       .map(this._extractData(Observable.throw))
@@ -158,7 +152,7 @@ export class GdeicRestful {
   getPromise(observable: Observable<any>, isHoldOn: boolean = false): Promise<any> {
     if (isHoldOn) {
       this._isLoading = true;
-      this._loading$.next(true);
+      this.loading$.next(true);
     }
     return observable.toPromise()
       .then(this._extractData(Promise.reject))
@@ -173,7 +167,7 @@ export class GdeicRestful {
         responseType: action.responseType || 'json',
         withCredentials: action.withCredentials || false,
         retry: action.retry || 3
-      }
+      };
       if (action.headers) { _options['headers'] = action.headers; }
       if (!GdeicRestful._observeSet.has(action.observe)) { _options['observe'] = 'body'; }
       if (action.params) { _options['params'] = action.params; }
@@ -195,7 +189,7 @@ export class GdeicRestful {
             }
           }
           return this._httpClient[_method](_url, _options).retry(_options.retry);
-        }
+        };
       } else if (GdeicRestful._bodyMethodSet.has(_method)) {
         _function = (body: any, params: { [name: string]: any } = null): Observable<any> => {
           let _url = action.url;
@@ -208,15 +202,15 @@ export class GdeicRestful {
             }
           }
           return this._httpClient[_method](_url, body, _options).retry(_options.retry);
-        }
+        };
       } else if (_method === 'jsonp') {
         _function = (url: string, callbackParam: string): any => {
           return this._httpClient.jsonp(url, callbackParam);
-        }
+        };
       }
 
       return _function;
-    }
+    };
 
     for (const key of Object.keys(actions)) {
       instance[key] = _makeResourceMethod(actions[key]);
@@ -224,26 +218,33 @@ export class GdeicRestful {
   }
 
   private _extractData(rejectMethod: Function): ((data: any) => any) {
-    const _handleBody = (data: { [name: string]: any }, rejectMethod: Function): any => {
+    const _handleBody = (data: { [name: string]: any }, bodyRejectMethod: Function): any => {
       if (data.StatusCode === 0) {
         GdeicRestful._formatResponseData(data.Data);
         if (this._isLoading) {
           this._isLoading = false;
-          this._loading$.next(false);
+          this.loading$.next(false);
         }
         return data.Data || {};
       } else {
-        this._error$.next({ StatusCode: data.StatusCode, ErrorMsg: data.ErrorMsg });
+        this.error$.next({ StatusCode: data.StatusCode, ErrorMsg: data.ErrorMsg });
         if (this._isLoading) {
           this._isLoading = false;
-          this._loading$.next(false);
+          this.loading$.next(false);
         }
-        return rejectMethod(data.ErrorMsg);
+        return bodyRejectMethod(data.ErrorMsg);
       }
-    }
+    };
 
     return (data: any) => {
-      if (data instanceof Object && Gdeic.toJson(Object.keys(data).sort()) === Gdeic.toJson(['Data', 'ErrorMsg', 'StatusCode'])) {
+      if (data instanceof Object
+        && (() => {
+          const _dataKeys = Object.keys(data).sort();
+          for (const x of ['Data', 'ErrorMsg', 'StatusCode']) {
+            if (_dataKeys.indexOf(x) < 0) { return false; }
+          }
+          return true;
+        })()) {
         return _handleBody(data, Observable.throw);
       } else if (data instanceof Response) {
         const _body = data.json();
@@ -251,7 +252,7 @@ export class GdeicRestful {
       } else {
         if (this._isLoading) {
           this._isLoading = false;
-          this._loading$.next(false);
+          this.loading$.next(false);
         }
         return data;
       }
@@ -262,7 +263,7 @@ export class GdeicRestful {
     return (res: Response) => {
       if (this._isLoading) {
         this._isLoading = false;
-        this._loading$.next(false);
+        this.loading$.next(false);
       }
       let _message;
       try {
@@ -271,7 +272,7 @@ export class GdeicRestful {
         _message = res.statusText;
       }
       const _error = { StatusCode: +res.status, ErrorMsg: _message };
-      this._error$.next(_error);
+      this.error$.next(_error);
       return rejectMethod(_error);
     };
   }

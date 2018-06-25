@@ -3,12 +3,12 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 
 import { Gdeic } from './gdeic.service';
 
-export enum GdeicFormArrayType {
-  Radio = -1000000,
-  Select = -999999,
-  Checkbox = -999998,
-  MultiSelect = -999997,
-  Group = -999996
+export const enum GdeicFormArrayType {
+  Radio = 'RADIO',
+  Select = 'SELECT',
+  Checkbox = 'CHECKBOX',
+  MultiSelect = 'MULTISELECT',
+  Group = 'GROUP'
 }
 
 export interface GdeicFormArraySettings {
@@ -41,7 +41,7 @@ export class GdeicForm {
                       const _result = _ref.reference.filter(x => x[_ref.identification] === _value[_ref.identification])[0];
                       controlsConfig[key] = _result ? [_result[_ref.identification]] : [null];
                     } else {
-                      controlsConfig[key] = [_ref.reference.filter(x => x === _value)[0] || null]
+                      controlsConfig[key] = [_ref.reference.filter(x => x === _value)[0] || null];
                     }
                   } else {
                     controlsConfig[key] = [_ref.defaultValue];
@@ -82,7 +82,7 @@ export class GdeicForm {
             }
           }
         } else if (_config.constructor === FormGroup) {
-          controlsConfig[key] = _config
+          controlsConfig[key] = _config;
         } else {
           if (_value !== undefined && _value !== null) {
             if (_value.constructor === Array || _value.constructor === Object) {
@@ -130,7 +130,8 @@ export class GdeicForm {
                   result[key] = formGroupValue[key].map((x, i) => x.checked ? i : -1).filter(x => x > -1).map(x => _ref.reference[x]);
                   break;
                 case GdeicFormArrayType.MultiSelect:
-                  result[key] = _ref.reference.filter(x => formGroupValue[key].indexOf(_ref.identification ? x[_ref.identification] : x) > -1);
+                  result[key] = _ref.reference
+                    .filter(x => formGroupValue[key].indexOf(_ref.identification ? x[_ref.identification] : x) > -1);
                   break;
                 case GdeicFormArrayType.Group:
                   // be improving

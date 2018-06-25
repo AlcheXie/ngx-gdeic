@@ -19,8 +19,8 @@ export interface GdeicCanComponentDeactivate {
 
 @Injectable()
 export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCanComponentDeactivate> {
+  readonly submit$ = new Subject<boolean>();
   private _successCallback: Function;
-  submit$ = new Subject<boolean>();
 
   constructor(
     private _router: Router,

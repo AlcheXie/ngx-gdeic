@@ -4,7 +4,7 @@ import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class Gdeic {
-  private _finishInit$ = new Subject<boolean>();
+  private readonly _finishInit$ = new Subject<boolean>();
   private _isFinishInit = false;
 
   static noop = function () { };
