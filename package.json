@@ -1,6 +1,6 @@
 {
   "name": "ngx-gdeic",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "bundles/ngx-gdeic.umd.js",
   "scripts": {
@@ -31,6 +31,7 @@
     "codelyzer": "^4.0.1",
     "html-loader": "^0.4.5",
     "raw-loader": "^0.5.1",
+    "typescript": "^2.9.2",
     "ui-gdeic": "^1.0.0",
     "webpack": "^2.6.0"
   }
