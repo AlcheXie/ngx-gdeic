@@ -144,7 +144,12 @@ export class GdeicForm {
             result[key] = formGroupValue[key];
           }
         } else {
-          result[key] = formGroupValue[key];
+          const _formValue = formGroupValue[key];
+          if (_formValue !== undefined && _formValue !== null) {
+            result[key] = _formValue;
+          } else {
+            result[key] = _config;
+          }
         }
       } else {
         result[key] = formGroupValue[key];
