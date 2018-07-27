@@ -19,14 +19,14 @@ export interface GdeicCanComponentDeactivate {
 
 @Injectable()
 export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCanComponentDeactivate> {
-  readonly submit$ = new Subject<boolean>();
+  private readonly _submit$ = new Subject<boolean>();
   private _successCallback: Function;
 
   constructor(
     private _router: Router,
     private _cache: GdeicCache
   ) {
-    this.submit$.subscribe(() => this._successCallback());
+    this._submit$.subscribe(() => this._successCallback());
   }
 
   canActivate(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
@@ -62,12 +62,12 @@ export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCan
     }
   }
 
-  canDeactivate(component: GdeicCanComponentDeactivate): Observable<boolean> | Promise<boolean> | boolean {
+  canDeactivate(component: GdeicCanComponentDeactivate): boolean {
     if (component.canDeactivate) {
       if (component.canDeactivate()) {
         return true;
       } else {
-        return new Promise<boolean>(resolve => resolve(window.confirm('是否放弃编辑？')));
+        return window.confirm('是否放弃编辑？');
       }
     } else {
       return true;
@@ -90,10 +90,10 @@ export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCan
 
   submit(promise?: Promise<any>): void {
     if (promise === undefined) {
-      this.submit$.next();
+      this._submit$.next();
     } else {
       promise
-        .then(() => this.submit$.next());
+        .then(() => this._submit$.next());
     }
   }
 
