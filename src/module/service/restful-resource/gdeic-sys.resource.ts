@@ -31,6 +31,29 @@ interface GdeicSysResourceMethods {
   queryOuAccounts: (params: { ouId: number }) => Observable<any>;
 }
 
+interface GdeicSysNewResourceMethods extends GdeicSysResourceMethods {
+  me: () => Observable<any>;
+  myMenu: () => Observable<any>;
+  getAdTree: () => Observable<any>;
+  refreshAd: () => Observable<any>;
+  searchAccount: (params: { keyword: string }) => Observable<any>;
+  addAccount: (body: any) => Observable<any>;
+  updateAccount: (body: any) => Observable<any>;
+  lockUpAccount: (body: any) => Observable<any>;
+  unlockAccount: (body: any) => Observable<any>;
+  removeAccount: (body: any) => Observable<any>;
+  addRole: (body: any) => Observable<any>;
+  updateRole: (body: any) => Observable<any>;
+  removeRole: (body: any) => Observable<any>;
+  addMenu: (body: any) => Observable<any>;
+  updateMenu: (body: any) => Observable<any>;
+  removeMenu: (body: any) => Observable<any>;
+}
+
+type Readonly<T> = {
+  readonly [P in keyof T]: T[P];
+}
+
 const _actions = {
   getAccountInfo: {
     url: 'api/account/account',
@@ -113,9 +136,76 @@ const _actions = {
     method: 'GET'
   }
 };
+const _newActions = {
+  me: {
+    url: 'api/account/me',
+    method: 'GET'
+  },
+  myMenu: {
+    url: 'api/account/menu',
+    method: 'GET'
+  },
+  getAdTree: {
+    url: 'api/account/get-ad-ou',
+    method: 'GET'
+  },
+  refreshAd: {
+    url: 'api/account/refresh-ad',
+    method: 'GET'
+  },
+  searchAccount: {
+    url: 'api/account/get-ad-accounts/search/:keyword',
+    method: 'GET'
+  },
+  addAccount: {
+    url: 'api/account/add-account',
+    method: 'POST'
+  },
+  updateAccount: {
+    url: 'api/account/update-account',
+    method: 'POST'
+  },
+  lockUpAccount: {
+    url: 'api/account/lock-account',
+    method: 'POST'
+  },
+  unlockAccount: {
+    url: 'api/account/unlock-account',
+    method: 'POST'
+  },
+  removeAccount: {
+    url: 'api/account/del-account',
+    method: 'POST'
+  },
+  addRole: {
+    url: 'api/account/add-role',
+    method: 'POST'
+  },
+  updateRole: {
+    url: 'api/account/update-role',
+    method: 'POST'
+  },
+  removeRole: {
+    url: 'api/account/del-role',
+    method: 'POST'
+  },
+  addMenu: {
+    url: 'api/account/add-menu',
+    method: 'POST'
+  },
+  updateMenu: {
+    url: 'api/account/update-menu',
+    method: 'POST'
+  },
+  removeMenu: {
+    url: 'api/account/del-menu',
+    method: 'POST'
+  }
+}
 
 @Injectable()
-export class GdeicSysResource implements GdeicRestfulResource, GdeicSysResourceMethods {
+export class GdeicSysResource implements Readonly<GdeicRestfulResource>, Readonly<GdeicSysResourceMethods> {
+  // old
   readonly ResourceName = 'GdeicSysResource';
   readonly getAccountInfo: () => Observable<Response>;
   readonly getHeader: () => Observable<Response>;
@@ -151,8 +241,9 @@ export class GdeicSysResource implements GdeicRestfulResource, GdeicSysResourceM
 }
 
 @Injectable()
-export class GdeicSysNewResource implements GdeicRestfulResource {
+export class GdeicSysNewResource implements Readonly<GdeicRestfulResource>, Readonly<GdeicSysNewResourceMethods> {
   readonly ResourceName = 'GdeicSysNewResource';
+  //#region  old
   readonly getAccountInfo: () => Observable<any>;
   readonly getHeader: () => Observable<any>;
   readonly queryAccount: () => Observable<any>;
@@ -173,11 +264,28 @@ export class GdeicSysNewResource implements GdeicRestfulResource {
   readonly getOuTree: () => Observable<any>;
   readonly initOutree: () => Observable<any>;
   readonly queryOuAccounts: (params: { ouId: number }) => Observable<any>;
+  //#endregion
+  readonly me: () => Observable<any>;
+  readonly myMenu: () => Observable<any>;
+  readonly getAdTree: () => Observable<any>;
+  readonly refreshAd: () => Observable<any>;
+  readonly searchAccount: (params: { keyword: string }) => Observable<any>;
+  readonly addAccount: (body: any) => Observable<any>;
+  readonly updateAccount: (body: any) => Observable<any>;
+  readonly lockUpAccount: (body: any) => Observable<any>;
+  readonly unlockAccount: (body: any) => Observable<any>;
+  readonly removeAccount: (body: any) => Observable<any>;
+  readonly addRole: (body: any) => Observable<any>;
+  readonly updateRole: (body: any) => Observable<any>;
+  readonly removeRole: (body: any) => Observable<any>;
+  readonly addMenu: (body: any) => Observable<any>;
+  readonly updateMenu: (body: any) => Observable<any>;
+  readonly removeMenu: (body: any) => Observable<any>;
 
   constructor(
     private _gdeicRestful: GdeicRestful
   ) {
-    _gdeicRestful.make(_actions, this);
+    _gdeicRestful.make({ ..._actions, ..._newActions }, this);
     Object.defineProperty(window, GDEIC_SYS_RESOURCE, {
       value: this,
       writable: false,

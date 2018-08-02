@@ -1,13 +1,16 @@
 import { Gdeic } from '../service/gdeic.service';
-import { GDEIC_RESTFUL } from '../service/gdeic-restful.service';
-import { GDEIC_SYS_RESOURCE } from '../service/restful-resource/gdeic-sys.resource';
+import { GDEIC_RESTFUL, GdeicRestful } from '../service/gdeic-restful.service';
+import { GDEIC_SYS_RESOURCE, GdeicSysNewResource, GdeicSysResource } from '../service/restful-resource/gdeic-sys.resource';
 import * as GdeicSys from '../interface/GdeicSys';
 
 export class GdeicAccountRole {
   Accounts: GdeicSys.GdeicAccount[];
   Roles: GdeicSys.GdeicRole[];
-  ManageOu: GdeicSys.GdeicManageOu;
+  ManageOu: GdeicSys.GdeicManageOu | GdeicSys.GdeicAdOu;
   LockoutEnabled: boolean;
+
+  private _restful: GdeicRestful = window[GDEIC_RESTFUL];
+  private _sysResource: GdeicSysResource | GdeicSysNewResource = window[GDEIC_SYS_RESOURCE];
 
   constructor(
     account: GdeicSys.GdeicAccount | GdeicSys.GdeicAccount[]
@@ -34,9 +37,36 @@ export class GdeicAccountRole {
   }
 
   save(isAdmin: boolean, isUnifyManageOu: boolean = false): Promise<any> {
-    const _accounts = Gdeic.copy(this.Accounts);
-    for (const account of _accounts) {
-      account.roles = this.Roles;
+    const _accounts = this._getResultAccountData(isAdmin, isUnifyManageOu);
+    return this._restful.getPromise(this._sysResource.saveAccount(_accounts));
+  }
+
+  add(isAdmin: boolean, isUnifyManageOu: boolean = false): Promise<any> {
+    const _accounts = this._getResultAccountData(isAdmin, isUnifyManageOu);
+    return Promise.all(_accounts.map(x => this._restful.getPromise((<GdeicSysNewResource>this._sysResource).addAccount(x))));
+  }
+
+  update(isAdmin: boolean, isUnifyManageOu: boolean = false): Promise<any> {
+    const _accounts = this._getResultAccountData(isAdmin, isUnifyManageOu);
+    return Promise.all(_accounts.map(x => this._restful.getPromise((<GdeicSysNewResource>this._sysResource).updateAccount(x))));
+  }
+
+  lock() {
+    return Promise.all(this.Accounts.map(x => this._restful.getPromise((<GdeicSysNewResource>this._sysResource).lockUpAccount(x))));
+  }
+
+  unlock() {
+    return Promise.all(this.Accounts.map(x => this._restful.getPromise((<GdeicSysNewResource>this._sysResource).unlockAccount(x))));
+  }
+
+  remove() {
+    return Promise.all(this.Accounts.map(x => this._restful.getPromise((<GdeicSysNewResource>this._sysResource).removeAccount(x))));
+  }
+
+  private _getResultAccountData(isAdmin: boolean, isUnifyManageOu: boolean = false): GdeicSys.GdeicAccount[] {
+    const data = Gdeic.copy(this.Accounts);
+    for (const account of data) {
+      account.Roles = this.Roles;
       if (isAdmin) {
         if (isUnifyManageOu) {
           account.ManageOu = this.ManageOu;
@@ -46,6 +76,6 @@ export class GdeicAccountRole {
         account.LockoutEnabled = this.LockoutEnabled;
       }
     }
-    return window[GDEIC_RESTFUL].getPromise(window[GDEIC_SYS_RESOURCE].saveAccount(_accounts));
+    return data;
   }
 }

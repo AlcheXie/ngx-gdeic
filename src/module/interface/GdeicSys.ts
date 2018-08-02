@@ -1,11 +1,21 @@
 export interface GdeicAccount {
-  Sid: string;
+  Id: number | string;
+  Sid?: string;
   Name: string;
   Roles: GdeicRole[];
-  ManageOu: GdeicManageOu;
+  ManageOu: GdeicManageOu | GdeicAdOu;
   Region?: { Code: string, Name: string, ParentCode: string };
   Department?: string;
   LockoutEnabled?: boolean;
+}
+
+export interface GdeicSimpleAccount {
+  UserId: string;
+  UserName: string;
+  LoginName: string;
+  RoleNames: string[];
+  ManagerOuId: string;
+  ManagerCode: string;
 }
 
 export interface GdeicRole {
@@ -30,9 +40,19 @@ export interface GdeicMenu {
 }
 
 export interface GdeicManageOu {
-  Id: number | string;
+  Id: number;
   OuName: string;
   DnName: string;
   ParentId: number;
   SubOus: GdeicManageOu[];
+}
+
+export interface GdeicAdOu {
+  Id: string;
+  Name: string;
+  FullName: string;
+  RegionCode: string;
+  ParentId: string;
+  SubAdNodes: GdeicAdOu[];
+  Type: string;
 }
