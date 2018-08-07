@@ -246,7 +246,7 @@ export class GdeicRestful {
           }
           return true;
         })()) {
-        return _handleBody(data, Observable.throw);
+        return _handleBody(data, rejectMethod);
       } else if (data instanceof Response) {
         const _body = data.json();
         return _handleBody(_body, rejectMethod);
