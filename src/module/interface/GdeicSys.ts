@@ -2,36 +2,37 @@ export interface GdeicAccount {
   Sid: string;
   Name: string;
   Roles: GdeicRole[];
-  LockoutEnabled: boolean;
   ManageOu: GdeicManageOu;
-  [name: string]: any;
+  Region?: { Code: string, Name: string, ParentCode: string };
+  Department?: string;
+  LockoutEnabled?: boolean;
 }
 
 export interface GdeicRole {
-  Id: number;
+  Id: number | string;
   Name: string;
-  Description: string;
-  Order: number;
-  IsActive: boolean;
-  IsBackstage: boolean;
-  [name: string]: any;
-}
-
-export interface GdeicManageOu {
-  Id: number;
-  OuName: string;
-  DnName: string;
-  [name: string]: any;
+  Description?: string;
+  Order?: number;
+  IsActive?: boolean;
+  IsBackstage?: boolean;
 }
 
 export interface GdeicMenu {
-  Id: number;
+  Id: number | string;
   Name: string;
-  ParentId: number;
   Url: string;
-  Order: number;
-  SubMenus: GdeicMenu[];
-  IsActive: boolean;
-  Roles: GdeicRole[] | any[];
-  [name: string]: any;
+  Icon: string;
+  Roles: GdeicRole[];
+  ParentId?: number | string;
+  Order?: number;
+  IsActive?: boolean;
+  SubMenus?: GdeicMenu[];
+}
+
+export interface GdeicManageOu {
+  Id: number | string;
+  OuName: string;
+  DnName: string;
+  ParentId: number;
+  SubOus: GdeicManageOu[];
 }

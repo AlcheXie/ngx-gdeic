@@ -4,6 +4,5 @@ export interface GdeicResultError {
 }
 
 export interface GdeicRestfulResource {
-  ResourceName: string;
-  [name: string]: any;
+  readonly ResourceName: string;
 }
