@@ -3,7 +3,6 @@ import {
   HostListener, Input, OnDestroy, Output, ViewEncapsulation
 } from '@angular/core';
 
-import { GdeicConfig } from '../service/gdeic-config.service';
 import { GdeicRestful } from '../service/gdeic-restful.service';
 import { GdeicResultError } from '../interface/GdeicRestful';
 
@@ -48,7 +47,6 @@ export class GdeicErrorComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private _elementRef: ElementRef,
-    private _config: GdeicConfig,
     private _restful: GdeicRestful
   ) {
     const _subject = this._errorSubject || this._restful.error$;
@@ -80,11 +78,6 @@ export class GdeicErrorComponent implements AfterViewInit, OnDestroy {
   }
 
   private _clearMsg(): void {
-    if (this._error.StatusCode === -1 && this._config.LOGIN_URL !== undefined) {
-      window.location.href = this._config.LOGIN_URL;
-    } else if (this._error.StatusCode === 500) {
-      window.location.reload();
-    }
     this.isShowError = false;
   }
 }
