@@ -3,7 +3,7 @@ import { Http, Response } from '@angular/http';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { GdeicResultError, GdeicRestfulResource } from '../interface/GdeicRestful';
-import { Gdeic } from '../service/gdeic.service';
+import { GdeicConfig } from './gdeic-config.service';
 
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -17,10 +17,10 @@ interface Action {
   url: string;
   method?: string;
   headers?: HttpHeaders | { [header: string]: string | string[]; };
-  observe?: string; // 'body' | 'events' | 'response';
+  observe?: 'body' | 'events' | 'response';
   params?: HttpParams | { [param: string]: string | string[]; };
   reportProgress?: boolean;
-  responseType?: string; // 'arraybuffer' | 'blob' | 'json' | 'text';
+  responseType?: 'arraybuffer' | 'blob' | 'json' | 'text';
   withCredentials?: boolean;
   callbackParam?: string;
   retry?: number;
@@ -130,7 +130,8 @@ export class GdeicRestful {
   }
 
   constructor(
-    private _httpClient: HttpClient
+    private _httpClient: HttpClient,
+    private _config: GdeicConfig
   ) {
     Object.defineProperty(window, GDEIC_RESTFUL, {
       value: this,
@@ -182,7 +183,7 @@ export class GdeicRestful {
       let _function;
       if (GdeicRestful._paramMethodSet.has(_method)) {
         _function = (params: { [name: string]: any } = null): Observable<any> => {
-          let _url = action.url;
+          let _url = this._config.RESOURCE_BASE_URL + action.url;
           if (params) {
             for (const key of Object.keys(params)) {
               _url = _url.replace(`:${key}`, params[key]);
@@ -192,7 +193,7 @@ export class GdeicRestful {
         };
       } else if (GdeicRestful._bodyMethodSet.has(_method)) {
         _function = (body: any, params: { [name: string]: any } = null): Observable<any> => {
-          let _url = action.url;
+          let _url = this._config.RESOURCE_BASE_URL + action.url;
           if (body.constructor === Object || body.constructor === Array) {
             GdeicRestful._formatRequestData(body);
           }
@@ -219,7 +220,7 @@ export class GdeicRestful {
 
   private _extractData(rejectMethod: Function): ((data: any) => any) {
     const _handleBody = (data: { [name: string]: any }, bodyRejectMethod: Function): any => {
-      if (data.StatusCode === 0) {
+      if (data.StatusCode === this._config.SUCCESS_CODE) {
         GdeicRestful._formatResponseData(data.Data);
         if (this._isLoading) {
           this._isLoading = false;

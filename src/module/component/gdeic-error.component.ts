@@ -80,8 +80,8 @@ export class GdeicErrorComponent implements AfterViewInit, OnDestroy {
   }
 
   private _clearMsg(): void {
-    if (this._error.StatusCode === -1 && this._config.loginUrl !== undefined) {
-      window.location.href = this._config.loginUrl;
+    if (this._error.StatusCode === -1 && this._config.LOGIN_URL !== undefined) {
+      window.location.href = this._config.LOGIN_URL;
     } else if (this._error.StatusCode === 500) {
       window.location.reload();
     }
