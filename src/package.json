@@ -1,0 +1,22 @@
+{
+  "name": "ngx-gdeic",
+  "version": "1.2.1",
+  "repository": "https://github.com/AlcheXie/ngx-gdeic.git",
+  "author": "AlcheXie",
+  "license": "MIT",
+  "peerDependencies": {
+    "@angular/common": "^5.0.0",
+    "@angular/core": "^5.0.0",
+    "@angular/forms": "^5.0.0",
+    "@angular/http": "^5.0.0",
+    "@angular/router": "^5.0.0",
+    "rxjs": "^5.0.0"
+  },
+  "ngPackage": {
+    "$schema": "./node_modules/ng-packagr/ng-package.schema.json",
+    "lib": {
+      "entryFile": "public_api.ts"
+    },
+    "dest": "../dist"
+  }
+}

@@ -1,32 +1,23 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "outDir": ".aot",
-    "target": "es5",
-    "module": "es2015",
-    "moduleResolution": "node",
+    "outDir": "./dist/out-tsc",
+    "baseUrl": "./src",
     "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "noImplicitAny": false,
-    "removeComments": false,
+    "target": "es5",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "lib": [
-      "es2015",
+      "es2017",
       "dom"
     ]
   },
-  "angularCompilerOptions": {
-    "genDir": ".",
-    "skipMetadataEmit": true
-  },
-  "files": [
-    "index.ts"
-  ],
   "exclude": [
-    ".vscode",
-    "src",
-    "node_modules",
-    "bower_components",
-    "typings"
+    ".ng_build"
   ]
 }

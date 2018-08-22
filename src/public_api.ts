@@ -1,3 +1,6 @@
+// Module
+export * from './module/gdeic.module';
+
 // Class
 export * from './module/class/GdeicAccountRole';
 export * from './module/class/GdeicCommonEdit';
@@ -34,5 +37,7 @@ export * from './module/service/gdeic-restful.service';
 export * from './module/service/route-guard/gdeic-common-edit-guard.service';
 export * from './module/service/restful-resource/gdeic-sys.resource';
 
-// Total
-export * from './module/gdeic.module';
+// Polyfill
+import './polyfill/Array';
+import './polyfill/Date';
+import './polyfill/String';

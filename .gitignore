@@ -1,3 +1,21 @@
-/.vscode/
-/node_modules/
+# compiled output
+/dist
+/tmp
+/out-tsc
+*.tgz
+
+# dependencies
+/node_modules
+/node_modules.*
 package-lock.json
+
+# IDE - VSCode
+/.vscode
+
+# ignore build and dist for now
+.ng_build
+*.metadata.json
+
+#System Files
+.DS_Store
+Thumbs.db

@@ -1,10 +1,10 @@
 {
-  "name": "ngx-gdeic",
-  "version": "1.2.1",
-  "description": "",
-  "main": "bundles/ngx-gdeic.umd.js",
+  "name": "ngx-gdeic-src",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "build": "./node_modules/.bin/webpack"
+    "build": "rimraf dist && ng-packagr -p src/package.json",
+    "pack": "npm pack -p \"./dist\""
   },
   "repository": {
     "type": "git",
@@ -15,24 +15,24 @@
   "bugs": {
     "url": "https://github.com/AlcheXie/ngx-gdeic/issues"
   },
-  "homepage": "https://github.com/AlcheXie/ngx-gdeic#readme",
   "dependencies": {
     "@angular/common": "^5.0.0",
+    "@angular/compiler": "^5.0.0",
     "@angular/core": "^5.0.0",
     "@angular/forms": "^5.0.0",
     "@angular/http": "^5.0.0",
-    "@angular/platform-browser": "^5.0.0",
     "@angular/router": "^5.0.0",
-    "rxjs": "^5.5.2",
-    "zone.js": "^0.8.14"
+    "rxjs": "^5.0.0"
   },
   "devDependencies": {
-    "awesome-typescript-loader": "^3.1.3",
-    "codelyzer": "^4.0.1",
-    "html-loader": "^0.4.5",
-    "raw-loader": "^0.5.1",
-    "typescript": "^2.9.2",
-    "ui-gdeic": "^1.0.0",
-    "webpack": "^2.6.0"
+    "@angular/cli": "1.7.4",
+    "@angular/compiler-cli": "^5.0.0",
+    "@types/node": "~10.5.0",
+    "codelyzer": "~4.4.0",
+    "ng-packagr": "^3.0.6",
+    "rimraf": "^2.6.2",
+    "tsickle": "^0.32.1",
+    "tslint": "~5.11.0",
+    "typescript": "~2.7.2"
   }
 }
