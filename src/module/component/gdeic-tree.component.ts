@@ -1,4 +1,4 @@
-import { Component, ContentChild, Input, TemplateRef } from '@angular/core';
+import { Component, ContentChild, Input } from '@angular/core';
 
 @Component({
   selector: 'gdeic-tree',
@@ -24,7 +24,7 @@ export class GdeicTreeComponent {
   @Input() gdeicChildName: string;
   @Input() gdeicHasTrigger = false;
   @Input() gdeicIndent = 30;
-  @ContentChild('treeview') treeview: TemplateRef<any>;
+  @ContentChild('treeview') treeview;
 
   tree: { [name: string]: any };
 }

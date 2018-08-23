@@ -14,6 +14,10 @@ export class GdeicArrayTextComponent implements OnInit {
     this._property = value;
   }
   @Input()
+  set gdeicProperties(value: string[]) {
+    this._properties = value;
+  }
+  @Input()
   set gdeicSplitOf(value: string) {
     this._splitOf = value;
   }
@@ -21,12 +25,26 @@ export class GdeicArrayTextComponent implements OnInit {
   showText: string;
   private _source: { [name: string]: any }[];
   private _property = '';
+  private _properties: string[];
   private _splitOf: string;
 
   ngOnInit() {
+    let _properties: string[];
     if (this._property !== '') {
-      const _sProperty = this._property.split('.').map(x => `['${x}']`).join('');
-      this.showText = this._source.map(x => eval(`x${_sProperty}`)).join(this._splitOf || ', ');
+      _properties = [this._property];
+    } else if (!!this._properties) {
+      _properties = this._properties;
+    }
+
+    if (!!_properties) {
+      this.showText = this._source.map(x => {
+        let result;
+        for (const s of _properties) {
+          result = !result ? x[s] : result[s];
+        }
+        return result;
+      })
+        .join(this._splitOf || ', ');
     }
   }
 }

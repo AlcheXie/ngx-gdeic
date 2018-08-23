@@ -7,26 +7,26 @@ export class Gdeic {
   private readonly _finishInit$ = new Subject<boolean>();
   private _isFinishInit = false;
 
-  static noop = function () { };
+  static noop() { }
 
   static copy(source: any): any {
     const _json = JSON.stringify(source);
     if (source.constructor === Date) {
       return new Date(JSON.parse(_json));
     } else if (source.constructor === Array || source.constructor === Object) {
-      let _result = JSON.parse(_json);
-      const _remainFunc = (source, result) => {
-        for (const key of Object.keys(source)) {
-          if (source[key] !== undefined && source[key] !== null) {
-            if (source[key].constructor === Function) {
-              result[key] = source[key];
+      const _result = JSON.parse(_json);
+      const _remainFunc = (sourceObj, result) => {
+        for (const key of Object.keys(sourceObj)) {
+          if (sourceObj[key] !== undefined && sourceObj[key] !== null) {
+            if (sourceObj[key].constructor === Function) {
+              result[key] = sourceObj[key];
             }
-            if (source[key].constructor === Array || source.constructor === Object) {
-              _remainFunc(source[key], result[key]);
+            if (sourceObj[key].constructor === Array || sourceObj.constructor === Object) {
+              _remainFunc(sourceObj[key], result[key]);
             }
           }
         }
-      }
+      };
       _remainFunc(source, _result);
       return _result;
     } else {
@@ -47,12 +47,13 @@ export class Gdeic {
   }
 
   static getContextFunction(context: any, callbackName: string): ((...values: any[]) => any) {
-    return function (...values) {
+    const func = function (...values) {
       context[callbackName](...values);
     };
+    return func;
   }
 
-  static toggleItem(source: any[] = [], item: any, property?: string): boolean {
+  static toggleItem<T>(source: T[] = [], item: T, property?: string): boolean {
     let _nIdx, _oToggle;
     if (property === undefined) {
       _oToggle = item;
@@ -74,7 +75,7 @@ export class Gdeic {
     return true;
   }
 
-  private static _remove$Char = (data: any): void => {
+  private static _remove$Char(data: any): void {
     if (data === undefined || data === null) { return; }
     if (data.constructor === Array) {
       for (const value of data) {

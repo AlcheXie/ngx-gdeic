@@ -4,16 +4,16 @@ import { GDEIC_RESTFUL } from '../service/gdeic-restful.service';
 export class GdeicEdit {
   private _source: any[];
 
+  static make(source: any | any[]): GdeicEdit {
+    return new GdeicEdit(source);
+  }
+
   constructor(source: any | any[]) {
     if (source.constructor === Array) {
       this._source = Gdeic.copy(source);
     } else {
       this._source = Gdeic.copy([source]);
     }
-  }
-
-  static make(source: any | any[]): GdeicEdit {
-    return new GdeicEdit(source);
   }
 
   fire(method: Function): Promise<any[]> {

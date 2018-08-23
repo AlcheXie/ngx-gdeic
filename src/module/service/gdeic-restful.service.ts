@@ -13,7 +13,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/retry';
 import 'rxjs/add/operator/toPromise';
 
-interface Action {
+export interface Action {
   url: string;
   method?: string;
   headers?: HttpHeaders | { [header: string]: string | string[]; };

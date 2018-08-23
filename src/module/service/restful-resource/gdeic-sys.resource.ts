@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
 
 export const GDEIC_SYS_RESOURCE = 'GDEIC_SYS_RESOURCE';
 
-interface GdeicSysResourceMethods {
+export interface GdeicSysResourceMethods {
   getAccountInfo: () => Observable<any>;
   getHeader: () => Observable<any>;
   queryAccount: () => Observable<any>;
@@ -31,7 +31,7 @@ interface GdeicSysResourceMethods {
   queryOuAccounts: (params: { ouId: number }) => Observable<any>;
 }
 
-interface GdeicSysNewResourceMethods extends GdeicSysResourceMethods {
+export interface GdeicSysNewResourceMethods extends GdeicSysResourceMethods {
   me: () => Observable<any>;
   myMenu: () => Observable<any>;
   getAdTree: () => Observable<any>;
@@ -48,10 +48,6 @@ interface GdeicSysNewResourceMethods extends GdeicSysResourceMethods {
   addMenu: (body: any) => Observable<any>;
   updateMenu: (body: any) => Observable<any>;
   removeMenu: (body: any) => Observable<any>;
-}
-
-type Readonly<T> = {
-  readonly [P in keyof T]: T[P];
 }
 
 const _actions = {
@@ -201,10 +197,10 @@ const _newActions = {
     url: 'api/account/del-menu',
     method: 'POST'
   }
-}
+};
 
 @Injectable()
-export class GdeicSysResource implements Readonly<GdeicRestfulResource>, Readonly<GdeicSysResourceMethods> {
+export class GdeicSysResource implements GdeicRestfulResource, GdeicSysResourceMethods {
   // old
   readonly ResourceName = 'GdeicSysResource';
   readonly getAccountInfo: () => Observable<Response>;
@@ -241,7 +237,7 @@ export class GdeicSysResource implements Readonly<GdeicRestfulResource>, Readonl
 }
 
 @Injectable()
-export class GdeicSysNewResource implements Readonly<GdeicRestfulResource>, Readonly<GdeicSysNewResourceMethods> {
+export class GdeicSysNewResource implements GdeicRestfulResource, GdeicSysNewResourceMethods {
   readonly ResourceName = 'GdeicSysNewResource';
   //#region  old
   readonly getAccountInfo: () => Observable<any>;
