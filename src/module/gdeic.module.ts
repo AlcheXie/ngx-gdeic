@@ -8,7 +8,10 @@ import { GdeicConfig, GdeicConfigConfig } from './service/gdeic-config.service';
 import { GdeicRestful } from './service/gdeic-restful.service';
 
 import { GdeicCommonEditGuard } from './service/route-guard/gdeic-common-edit-guard.service';
-import { GdeicSysResource } from './service/restful-resource/gdeic-sys.resource';
+import { GdeicSysAdAccountResource } from './service/restful-resource/gdeic-sys-ad-account.resource';
+import { GdeicSysInfoResource } from './service/restful-resource/gdeic-sys-info.resource';
+import { GdeicSysMenuResource } from './service/restful-resource/gdeic-sys-menu.resource';
+import { GdeicSysRoleResource } from './service/restful-resource/gdeic-sys-role.resource';
 
 import { GdeicArrayTextComponent } from './component/gdeic-array-text.component';
 import { GdeicErrorComponent } from './component/gdeic-error.component';
@@ -58,9 +61,12 @@ export class GdeicCommonModule { }
     Gdeic,
     GdeicCache,
     GdeicConfig,
-    GdeicCommonEditGuard,
     GdeicRestful,
-    GdeicSysResource
+    GdeicCommonEditGuard,
+    GdeicSysAdAccountResource,
+    GdeicSysInfoResource,
+    GdeicSysMenuResource,
+    GdeicSysRoleResource
   ],
   exports: [
     GdeicCommonModule
