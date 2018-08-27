@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { GdeicResultError, GdeicRestfulResource } from '../interface/GdeicRestful';
@@ -40,45 +39,6 @@ export class GdeicRestful {
   readonly error$: Subject<GdeicResultError> = new Subject<GdeicResultError>();
 
   private _isLoading = false;
-
-  static make(actions: { [name: string]: Action }, instance: GdeicRestfulResource, http: Http): void {
-    const _makeResourceMethod = (action: Action): ((...values: any[]) => Observable<Response>) => {
-      let _method = action.method || 'get';
-      _method = _method.toLowerCase();
-      if (!GdeicRestful._paramMethodSet.has(_method) && !GdeicRestful._bodyMethodSet.has(_method)) {
-        _method = 'get';
-      }
-
-      if (GdeicRestful._paramMethodSet.has(_method)) {
-        return (search: { [name: string]: any } = null): Observable<Response> => {
-          let _url = action.url;
-          if (search) {
-            for (const key of Object.keys(search)) {
-              _url = _url.replace(`:${key}`, search[key]);
-            }
-          }
-          return http[_method](_url);
-        };
-      } else if (GdeicRestful._bodyMethodSet.has(_method)) {
-        return (data: any, search: { [name: string]: any } = null): Observable<Response> => {
-          let _url = action.url;
-          if (data.constructor === Object || data.constructor === Array) {
-            GdeicRestful._formatRequestData(data);
-          }
-          if (search) {
-            for (const key of Object.keys(search)) {
-              _url = _url.replace(`:${key}`, search[key]);
-            }
-          }
-          return http[_method](_url, data);
-        };
-      }
-    };
-
-    for (const key of Object.keys(actions)) {
-      instance[key] = _makeResourceMethod(actions[key]);
-    }
-  }
 
   private static _formatResponseData(data: any): void {
     if (data === undefined || data === null) { return; }
@@ -219,24 +179,6 @@ export class GdeicRestful {
   }
 
   private _extractData(rejectMethod: Function): ((data: any) => any) {
-    const _handleBody = (data: { [name: string]: any }, bodyRejectMethod: Function): any => {
-      if (data.StatusCode === this._config.SUCCESS_CODE) {
-        GdeicRestful._formatResponseData(data.Data);
-        if (this._isLoading) {
-          this._isLoading = false;
-          this.loading$.next(false);
-        }
-        return data.Data || {};
-      } else {
-        this.error$.next({ StatusCode: data.StatusCode, ErrorMsg: data.ErrorMsg });
-        if (this._isLoading) {
-          this._isLoading = false;
-          this.loading$.next(false);
-        }
-        return bodyRejectMethod(data.ErrorMsg);
-      }
-    };
-
     return (data: any) => {
       if (data instanceof Object
         && (() => {
@@ -246,10 +188,21 @@ export class GdeicRestful {
           }
           return true;
         })()) {
-        return _handleBody(data, rejectMethod);
-      } else if (data instanceof Response) {
-        const _body = data.json();
-        return _handleBody(_body, rejectMethod);
+        if (data.StatusCode === this._config.SUCCESS_CODE) {
+          GdeicRestful._formatResponseData(data.Data);
+          if (this._isLoading) {
+            this._isLoading = false;
+            this.loading$.next(false);
+          }
+          return data.Data || {};
+        } else {
+          this.error$.next({ StatusCode: data.StatusCode, ErrorMsg: data.ErrorMsg });
+          if (this._isLoading) {
+            this._isLoading = false;
+            this.loading$.next(false);
+          }
+          return rejectMethod(data.ErrorMsg);
+        }
       } else {
         if (this._isLoading) {
           this._isLoading = false;
@@ -266,13 +219,7 @@ export class GdeicRestful {
         this._isLoading = false;
         this.loading$.next(false);
       }
-      let _message;
-      try {
-        _message = res.json().Message;
-      } catch (error) {
-        _message = res.statusText;
-      }
-      const _error = { StatusCode: +res.status, ErrorMsg: _message };
+      const _error = { StatusCode: +res.status, ErrorMsg: res.statusText };
       this.error$.next(_error);
       return rejectMethod(_error);
     };

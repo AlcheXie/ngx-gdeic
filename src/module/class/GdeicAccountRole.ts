@@ -1,6 +1,6 @@
 import { Gdeic } from '../service/gdeic.service';
 import { GDEIC_RESTFUL, GdeicRestful } from '../service/gdeic-restful.service';
-import { GDEIC_SYS_RESOURCE, GdeicSysNewResource, GdeicSysResource } from '../service/restful-resource/gdeic-sys.resource';
+import { GDEIC_SYS_RESOURCE, GdeicSysResource } from '../service/restful-resource/gdeic-sys.resource';
 import * as GdeicSys from '../interface/GdeicSys';
 
 export class GdeicAccountRole {
@@ -10,7 +10,7 @@ export class GdeicAccountRole {
   LockoutEnabled: boolean;
 
   private _restful: GdeicRestful = window[GDEIC_RESTFUL];
-  private _sysResource: GdeicSysResource | GdeicSysNewResource = window[GDEIC_SYS_RESOURCE];
+  private _sysResource: GdeicSysResource = window[GDEIC_SYS_RESOURCE];
 
   constructor(
     account: GdeicSys.GdeicAccount | GdeicSys.GdeicAccount[]
@@ -36,31 +36,26 @@ export class GdeicAccountRole {
     }
   }
 
-  save(isAdmin: boolean, isUnifyManageOu: boolean = false): Promise<any> {
-    const _accounts = this._getResultAccountData(isAdmin, isUnifyManageOu);
-    return this._restful.getPromise(this._sysResource.saveAccount(_accounts));
-  }
-
   add(isAdmin: boolean, isUnifyManageOu: boolean = false): Promise<any> {
     const _accounts = this._getResultAccountData(isAdmin, isUnifyManageOu);
-    return Promise.all(_accounts.map(x => this._restful.getPromise((<GdeicSysNewResource>this._sysResource).addAccount(x))));
+    return Promise.all(_accounts.map(x => this._restful.getPromise((<GdeicSysResource>this._sysResource).addAccount(x))));
   }
 
   update(isAdmin: boolean, isUnifyManageOu: boolean = false): Promise<any> {
     const _accounts = this._getResultAccountData(isAdmin, isUnifyManageOu);
-    return Promise.all(_accounts.map(x => this._restful.getPromise((<GdeicSysNewResource>this._sysResource).updateAccount(x))));
+    return Promise.all(_accounts.map(x => this._restful.getPromise((<GdeicSysResource>this._sysResource).updateAccount(x))));
   }
 
   lock() {
-    return Promise.all(this.Accounts.map(x => this._restful.getPromise((<GdeicSysNewResource>this._sysResource).lockUpAccount(x))));
+    return Promise.all(this.Accounts.map(x => this._restful.getPromise((<GdeicSysResource>this._sysResource).lockAccount(x))));
   }
 
   unlock() {
-    return Promise.all(this.Accounts.map(x => this._restful.getPromise((<GdeicSysNewResource>this._sysResource).unlockAccount(x))));
+    return Promise.all(this.Accounts.map(x => this._restful.getPromise((<GdeicSysResource>this._sysResource).unlockAccount(x))));
   }
 
   remove() {
-    return Promise.all(this.Accounts.map(x => this._restful.getPromise((<GdeicSysNewResource>this._sysResource).removeAccount(x))));
+    return Promise.all(this.Accounts.map(x => this._restful.getPromise((<GdeicSysResource>this._sysResource).removeAccount(x))));
   }
 
   private _getResultAccountData(isAdmin: boolean, isUnifyManageOu: boolean = false): GdeicSys.GdeicAccount[] {
