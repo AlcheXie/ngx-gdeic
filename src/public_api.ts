@@ -3,6 +3,7 @@ export * from './module/gdeic.module';
 
 // Class
 export * from './module/class/GdeicAccountRole';
+export * from './module/class/GdeicAdAccountRole';
 export * from './module/class/GdeicCommonEdit';
 export * from './module/class/GdeicEdit';
 export * from './module/class/GdeicPulling';
