@@ -1,20 +1,21 @@
 import { Injectable } from '@angular/core';
 
-import { GdeicRestfulResource } from '../../interface/GdeicRestful';
+import { GdeicRestfulAction, GdeicRestfulResource } from '../../interface/GdeicRestful';
 import { GdeicRestful } from '../../service/gdeic-restful.service';
+import { GdeicRole } from '../../interface/GdeicSys';
 
 import { Observable } from 'rxjs/Observable';
 
 export interface GdeicSysRoleResourceMethods {
-  queryRole: () => Observable<any>;
-  queryRoleAdmin: () => Observable<any>;
-  getRoleById: (params: { id: string }) => Observable<any>;
-  addRole: (body: any) => Observable<any>;
-  updateRole: (body: any) => Observable<any>;
-  removeRole: (body: any) => Observable<any>;
+  queryRole: () => Observable<GdeicRole[]>;
+  queryRoleAdmin: () => Observable<GdeicRole[]>;
+  getRoleById: (params: { id: string }) => Observable<GdeicRole>;
+  addRole: (body: GdeicRole) => Observable<GdeicRole>;
+  updateRole: (body: GdeicRole) => Observable<GdeicRole>;
+  removeRole: (body: GdeicRole) => Observable<GdeicRole>;
 }
 
-const _actions = {
+const _actions: { [name: string]: GdeicRestfulAction } = {
   queryRole: {
     url: 'api/account/get-roles',
     method: 'GET'
@@ -44,12 +45,12 @@ const _actions = {
 @Injectable()
 export class GdeicSysRoleResource implements GdeicRestfulResource, GdeicSysRoleResourceMethods {
   readonly ResourceName = 'GdeicSysRoleResource';
-  readonly queryRole: () => Observable<any>;
-  readonly queryRoleAdmin: () => Observable<any>;
-  readonly getRoleById: (params: { id: string }) => Observable<any>;
-  readonly addRole: (body: any) => Observable<any>;
-  readonly updateRole: (body: any) => Observable<any>;
-  readonly removeRole: (body: any) => Observable<any>;
+  readonly queryRole: () => Observable<GdeicRole[]>;
+  readonly queryRoleAdmin: () => Observable<GdeicRole[]>;
+  readonly getRoleById: (params: { id: string }) => Observable<GdeicRole>;
+  readonly addRole: (body: GdeicRole) => Observable<GdeicRole>;
+  readonly updateRole: (body: GdeicRole) => Observable<GdeicRole>;
+  readonly removeRole: (body: GdeicRole) => Observable<GdeicRole>;
 
   constructor(
     private _gdeicRestful: GdeicRestful

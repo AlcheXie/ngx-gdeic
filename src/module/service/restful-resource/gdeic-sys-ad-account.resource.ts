@@ -1,26 +1,27 @@
 import { Injectable } from '@angular/core';
 
-import { GdeicRestfulResource } from '../../interface/GdeicRestful';
+import { GdeicRestfulAction, GdeicRestfulResource } from '../../interface/GdeicRestful';
 import { GdeicRestful } from '../gdeic-restful.service';
+import { GdeicAdAccount, GdeicAd } from '../../interface/GdeicSys';
 
 import { Observable } from 'rxjs/Observable';
 
 export const GDEIC_SYS_AD_ACCOUNT_RESOURCE = 'GDEIC_SYS_AD_ACCOUNT_RESOURCE';
 
 export interface GdeicSysAdAccountResourceMethods {
-  getAdTree: () => Observable<any>;
-  searchAd: (params: { keyword: string }) => Observable<any>;
-  getAdById: (params: { id: string }) => Observable<any>;
-  refreshAd: () => Observable<any>;
-  queryAccount: () => Observable<any>;
-  addAccount: (body: any) => Observable<any>;
-  updateAccount: (body: any) => Observable<any>;
-  lockAccount: (body: any) => Observable<any>;
-  unlockAccount: (body: any) => Observable<any>;
-  removeAccount: (body: any) => Observable<any>;
+  getAdTree: () => Observable<GdeicAd>;
+  searchAd: (params: { keyword: string }) => Observable<GdeicAd[]>;
+  getAdById: (params: { id: string }) => Observable<GdeicAd>;
+  refreshAd: () => Observable<boolean>;
+  queryAccount: () => Observable<GdeicAdAccount[]>;
+  addAccount: (body: GdeicAdAccount) => Observable<GdeicAdAccount>;
+  updateAccount: (body: GdeicAdAccount) => Observable<GdeicAdAccount>;
+  lockAccount: (body: GdeicAdAccount) => Observable<GdeicAdAccount>;
+  unlockAccount: (body: GdeicAdAccount) => Observable<GdeicAdAccount>;
+  removeAccount: (body: GdeicAdAccount) => Observable<GdeicAdAccount>;
 }
 
-const _actions = {
+const _actions: { [name: string]: GdeicRestfulAction } = {
   getAdTree: {
     url: 'api/account/get-ad-ou',
     method: 'GET'
@@ -66,16 +67,16 @@ const _actions = {
 @Injectable()
 export class GdeicSysAdAccountResource implements GdeicRestfulResource, GdeicSysAdAccountResourceMethods {
   readonly ResourceName = 'GdeicSysAdAccountResource';
-  readonly getAdTree: () => Observable<any>;
-  readonly searchAd: (params: { keyword: string }) => Observable<any>;
-  readonly getAdById: (params: { id: string }) => Observable<any>;
-  readonly refreshAd: () => Observable<any>;
-  readonly queryAccount: () => Observable<any>;
-  readonly addAccount: (body: any) => Observable<any>;
-  readonly updateAccount: (body: any) => Observable<any>;
-  readonly lockAccount: (body: any) => Observable<any>;
-  readonly unlockAccount: (body: any) => Observable<any>;
-  readonly removeAccount: (body: any) => Observable<any>;
+  readonly getAdTree: () => Observable<GdeicAd>;
+  readonly searchAd: (params: { keyword: string }) => Observable<GdeicAd[]>;
+  readonly getAdById: (params: { id: string }) => Observable<GdeicAd>;
+  readonly refreshAd: () => Observable<boolean>;
+  readonly queryAccount: () => Observable<GdeicAdAccount[]>;
+  readonly addAccount: (body: GdeicAdAccount) => Observable<GdeicAdAccount>;
+  readonly updateAccount: (body: GdeicAdAccount) => Observable<GdeicAdAccount>;
+  readonly lockAccount: (body: GdeicAdAccount) => Observable<GdeicAdAccount>;
+  readonly unlockAccount: (body: GdeicAdAccount) => Observable<GdeicAdAccount>;
+  readonly removeAccount: (body: GdeicAdAccount) => Observable<GdeicAdAccount>;
 
   constructor(
     private _gdeicRestful: GdeicRestful

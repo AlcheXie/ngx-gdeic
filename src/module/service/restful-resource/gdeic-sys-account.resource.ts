@@ -1,22 +1,23 @@
 import { Injectable } from '@angular/core';
 
-import { GdeicRestfulResource } from '../../interface/GdeicRestful';
+import { GdeicRestfulAction, GdeicRestfulResource } from '../../interface/GdeicRestful';
 import { GdeicRestful } from '../gdeic-restful.service';
+import { GdeicAccount } from '../../interface/GdeicSys';
 
 import { Observable } from 'rxjs/Observable';
 
 export const GDEIC_SYS_ACCOUNT_RESOURCE = 'GDEIC_SYS_ACCOUNT_RESOURCE';
 
 export interface GdeicSysAccountResourceMethods {
-  queryAccount: () => Observable<any>;
-  addAccount: (body: any) => Observable<any>;
-  updateAccount: (body: any) => Observable<any>;
-  lockAccount: (body: any) => Observable<any>;
-  unlockAccount: (body: any) => Observable<any>;
-  removeAccount: (body: any) => Observable<any>;
+  queryAccount: () => Observable<GdeicAccount[]>;
+  addAccount: (body: GdeicAccount) => Observable<GdeicAccount>;
+  updateAccount: (body: GdeicAccount) => Observable<GdeicAccount>;
+  lockAccount: (body: GdeicAccount) => Observable<GdeicAccount>;
+  unlockAccount: (body: GdeicAccount) => Observable<GdeicAccount>;
+  removeAccount: (body: GdeicAccount) => Observable<GdeicAccount>;
 }
 
-const _actions = {
+const _actions: { [name: string]: GdeicRestfulAction } = {
   queryAccount: {
     url: 'api/account/get-accounts',
     method: 'GET'
@@ -46,12 +47,12 @@ const _actions = {
 @Injectable()
 export class GdeicSysAccountResource implements GdeicRestfulResource, GdeicSysAccountResourceMethods {
   readonly ResourceName = 'GdeicSysAccountResource';
-  readonly queryAccount: () => Observable<any>;
-  readonly addAccount: (body: any) => Observable<any>;
-  readonly updateAccount: (body: any) => Observable<any>;
-  readonly lockAccount: (body: any) => Observable<any>;
-  readonly unlockAccount: (body: any) => Observable<any>;
-  readonly removeAccount: (body: any) => Observable<any>;
+  readonly queryAccount: () => Observable<GdeicAccount[]>;
+  readonly addAccount: (body: GdeicAccount) => Observable<GdeicAccount>;
+  readonly updateAccount: (body: GdeicAccount) => Observable<GdeicAccount>;
+  readonly lockAccount: (body: GdeicAccount) => Observable<GdeicAccount>;
+  readonly unlockAccount: (body: GdeicAccount) => Observable<GdeicAccount>;
+  readonly removeAccount: (body: GdeicAccount) => Observable<GdeicAccount>;
 
   constructor(
     private _gdeicRestful: GdeicRestful

@@ -1,19 +1,20 @@
 import { Injectable } from '@angular/core';
 
-import { GdeicRestfulResource } from '../../interface/GdeicRestful';
+import { GdeicRestfulAction, GdeicRestfulResource } from '../../interface/GdeicRestful';
 import { GdeicRestful } from '../../service/gdeic-restful.service';
+import { GdeicMenu } from '../../interface/GdeicSys';
 
 import { Observable } from 'rxjs/Observable';
 
 export interface GdeicSysMenuResourceMethods {
-  queryMenu: () => Observable<any>;
-  getMenuById: (params: { id: string }) => Observable<any>;
-  addMenu: (body: any) => Observable<any>;
-  updateMenu: (body: any) => Observable<any>;
-  removeMenu: (body: any) => Observable<any>;
+  queryMenu: () => Observable<GdeicMenu[]>;
+  getMenuById: (params: { id: string }) => Observable<GdeicMenu>;
+  addMenu: (body: GdeicMenu) => Observable<GdeicMenu>;
+  updateMenu: (body: GdeicMenu) => Observable<GdeicMenu>;
+  removeMenu: (body: GdeicMenu) => Observable<GdeicMenu>;
 }
 
-const _actions = {
+const _actions: { [name: string]: GdeicRestfulAction } = {
   queryMenu: {
     url: 'api/account/get-menus',
     method: 'GET'
@@ -39,11 +40,11 @@ const _actions = {
 @Injectable()
 export class GdeicSysMenuResource implements GdeicRestfulResource, GdeicSysMenuResourceMethods {
   readonly ResourceName = 'GdeicSysMenuResource';
-  readonly queryMenu: () => Observable<any>;
-  readonly getMenuById: (params: { id: string }) => Observable<any>;
-  readonly addMenu: (body: any) => Observable<any>;
-  readonly updateMenu: (body: any) => Observable<any>;
-  readonly removeMenu: (body: any) => Observable<any>;
+  readonly queryMenu: () => Observable<GdeicMenu[]>;
+  readonly getMenuById: (params: { id: string }) => Observable<GdeicMenu>;
+  readonly addMenu: (body: GdeicMenu) => Observable<GdeicMenu>;
+  readonly updateMenu: (body: GdeicMenu) => Observable<GdeicMenu>;
+  readonly removeMenu: (body: GdeicMenu) => Observable<GdeicMenu>;
 
   constructor(
     private _gdeicRestful: GdeicRestful

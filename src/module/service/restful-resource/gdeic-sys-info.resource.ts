@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
 
-import { GdeicRestfulResource } from '../../interface/GdeicRestful';
+import { GdeicRestfulAction, GdeicRestfulResource } from '../../interface/GdeicRestful';
 import { GdeicRestful } from '../../service/gdeic-restful.service';
+import { GdeicAccount, GdeicLoginAccount, GdeicMenu, GdeicRegisterAccount } from '../../interface/GdeicSys';
 
 import { Observable } from 'rxjs/Observable';
 
 export interface GdeicSysInfoResourceMethods {
-  register: (body: any) => Observable<any>;
+  register: (body: GdeicRegisterAccount) => Observable<GdeicAccount>;
   login: (body: { UserName: string; PassWord: string; CheckCode: string }) => Observable<any>;
-  me: () => Observable<any>;
-  myMenu: () => Observable<any>;
+  me: () => Observable<GdeicLoginAccount>;
+  myMenu: () => Observable<GdeicMenu[]>;
 }
 
-const _actions = {
+const _actions: { [name: string]: GdeicRestfulAction } = {
   register: {
     url: 'api/account/reg',
     method: 'POST'
@@ -34,10 +35,10 @@ const _actions = {
 @Injectable()
 export class GdeicSysInfoResource implements GdeicRestfulResource, GdeicSysInfoResourceMethods {
   readonly ResourceName = 'GdeicSysInfoResource';
-  readonly register: (body: any) => Observable<any>;
+  readonly register: (body: GdeicRegisterAccount) => Observable<GdeicAccount>;
   readonly login: (body: { UserName: string; PassWord: string; CheckCode: string }) => Observable<any>;
-  readonly me: () => Observable<any>;
-  readonly myMenu: () => Observable<any>;
+  readonly me: () => Observable<GdeicLoginAccount>;
+  readonly myMenu: () => Observable<GdeicMenu[]>;
   constructor(
     private _gdeicRestful: GdeicRestful
   ) {
