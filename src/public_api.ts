@@ -35,6 +35,8 @@ export * from './module/service/gdeic-form.service';
 export * from './module/service/gdeic-restful.service';
 
 export * from './module/service/route-guard/gdeic-common-edit-guard.service';
+
+export * from './module/service/restful-resource/gdeic-sys-account.resource';
 export * from './module/service/restful-resource/gdeic-sys-ad-account.resource';
 export * from './module/service/restful-resource/gdeic-sys-info.resource';
 export * from './module/service/restful-resource/gdeic-sys-menu.resource';

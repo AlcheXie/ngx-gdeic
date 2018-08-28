@@ -8,6 +8,8 @@ import { GdeicConfig, GdeicConfigConfig } from './service/gdeic-config.service';
 import { GdeicRestful } from './service/gdeic-restful.service';
 
 import { GdeicCommonEditGuard } from './service/route-guard/gdeic-common-edit-guard.service';
+
+import { GdeicSysAccountResource } from './service/restful-resource/gdeic-sys-account.resource';
 import { GdeicSysAdAccountResource } from './service/restful-resource/gdeic-sys-ad-account.resource';
 import { GdeicSysInfoResource } from './service/restful-resource/gdeic-sys-info.resource';
 import { GdeicSysMenuResource } from './service/restful-resource/gdeic-sys-menu.resource';
@@ -63,6 +65,7 @@ export class GdeicCommonModule { }
     GdeicConfig,
     GdeicRestful,
     GdeicCommonEditGuard,
+    GdeicSysAccountResource,
     GdeicSysAdAccountResource,
     GdeicSysInfoResource,
     GdeicSysMenuResource,
