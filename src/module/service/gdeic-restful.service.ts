@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
-import { GdeicResultError, GdeicRestfulResource } from '../interface/GdeicRestful';
+import { GdeicRestfulAction, GdeicRestfulResource, GdeicResultError } from '../interface/GdeicRestful';
 import { GdeicConfig } from './gdeic-config.service';
 
 import { Observable } from 'rxjs/Observable';
@@ -11,19 +11,6 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/retry';
 import 'rxjs/add/operator/toPromise';
-
-export interface Action {
-  url: string;
-  method?: string;
-  headers?: HttpHeaders | { [header: string]: string | string[]; };
-  observe?: 'body' | 'events' | 'response';
-  params?: HttpParams | { [param: string]: string | string[]; };
-  reportProgress?: boolean;
-  responseType?: 'arraybuffer' | 'blob' | 'json' | 'text';
-  withCredentials?: boolean;
-  callbackParam?: string;
-  retry?: number;
-}
 
 export let GDEIC_RESTFUL = 'GDEIC_RESTFUL';
 
@@ -120,8 +107,8 @@ export class GdeicRestful {
       .catch(this._handleError(Promise.reject));
   }
 
-  make(actions: { [name: string]: Action }, instance: GdeicRestfulResource): void {
-    const _makeResourceMethod = (action: Action): ((...values: any[]) => Observable<any>) => {
+  make(actions: { [name: string]: GdeicRestfulAction }, instance: GdeicRestfulResource): void {
+    const _makeResourceMethod = (action: GdeicRestfulAction): ((...values: any[]) => Observable<any>) => {
       const _options = {
         observe: action.observe || 'body',
         reportProgress: action.reportProgress || false,
