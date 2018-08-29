@@ -4,7 +4,7 @@ import { GdeicRestfulAction, GdeicRestfulResource } from '../../interface/GdeicR
 import { GdeicRestful } from '../../service/gdeic-restful.service';
 import { GdeicAccount, GdeicLoginAccount, GdeicMenu, GdeicRegisterAccount } from '../../interface/GdeicSys';
 
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 export interface GdeicSysInfoResourceMethods {
   register: (body: GdeicRegisterAccount) => Observable<GdeicAccount>;

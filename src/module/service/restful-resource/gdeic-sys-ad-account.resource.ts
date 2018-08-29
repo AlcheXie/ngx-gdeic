@@ -4,7 +4,7 @@ import { GdeicRestfulAction, GdeicRestfulResource } from '../../interface/GdeicR
 import { GdeicRestful } from '../gdeic-restful.service';
 import { GdeicAdAccount, GdeicAd } from '../../interface/GdeicSys';
 
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 export const GDEIC_SYS_AD_ACCOUNT_RESOURCE = 'GDEIC_SYS_AD_ACCOUNT_RESOURCE';
 

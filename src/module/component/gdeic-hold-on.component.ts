@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import { GdeicRestful } from '../service/gdeic-restful.service';
 
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'gdeic-hold-on',

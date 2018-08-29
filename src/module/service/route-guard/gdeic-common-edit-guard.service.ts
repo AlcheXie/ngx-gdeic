@@ -7,8 +7,7 @@ import {
 import { Gdeic } from '../gdeic.service';
 import { GdeicCache } from '../gdeic-cache.service';
 
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { Observable, Subject } from 'rxjs';
 
 const _editItemCacheName = 'coreEditItem';
 const _routerEventMap = new Map();

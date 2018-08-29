@@ -4,13 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { GdeicRestfulAction, GdeicRestfulResource, GdeicResultError } from '../interface/GdeicRestful';
 import { GdeicConfig } from './gdeic-config.service';
 
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/retry';
-import 'rxjs/add/operator/toPromise';
+import { Observable, Subject } from 'rxjs';
+import { catchError, map, retry } from 'rxjs/operators';
 
 export let GDEIC_RESTFUL = 'GDEIC_RESTFUL';
 
@@ -92,9 +87,10 @@ export class GdeicRestful {
       this._isLoading = true;
       this.loading$.next(true);
     }
-    return observable
-      .map(this._extractData(Observable.throw))
-      .catch(this._handleError(Observable.throw));
+    return observable.pipe(
+      map(this._extractData(Observable.throw)),
+      catchError(this._handleError(Observable.throw))
+    );
   }
 
   getPromise(observable: Observable<any>, isHoldOn: boolean = false): Promise<any> {
@@ -136,7 +132,9 @@ export class GdeicRestful {
               _url = _url.replace(`:${key}`, params[key]);
             }
           }
-          return this._httpClient[_method](_url, _options).retry(_options.retry);
+          return this._httpClient[_method](_url, _options).pipe(
+            retry(_options.retry)
+          );
         };
       } else if (GdeicRestful._bodyMethodSet.has(_method)) {
         _function = (body: any, params: { [name: string]: any } = null): Observable<any> => {
@@ -149,7 +147,9 @@ export class GdeicRestful {
               _url = _url.replace(`:${key}`, params[key]);
             }
           }
-          return this._httpClient[_method](_url, body, _options).retry(_options.retry);
+          return this._httpClient[_method](_url, body, _options).pipe(
+            retry(_options.retry)
+          );
         };
       } else if (_method === 'jsonp') {
         _function = (url: string, callbackParam: string): any => {

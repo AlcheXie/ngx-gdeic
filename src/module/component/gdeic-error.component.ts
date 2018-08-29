@@ -6,8 +6,7 @@ import {
 import { GdeicRestful } from '../service/gdeic-restful.service';
 import { GdeicResultError } from '../interface/GdeicRestful';
 
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
+import { Subject, Subscription } from 'rxjs';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
