@@ -1,5 +1,3 @@
-import { Gdeic } from '../module/service/gdeic.service';
-
 interface Array<T> {
   last(): T;
   intersect(array: T[]): T[];
@@ -17,37 +15,31 @@ interface Array<T> {
   });
   Reflect.defineProperty(_.prototype, 'intersect', {
     value: function intersect(array: any[]): any[] {
-      const _array = [];
-      array = array.map(x => Gdeic.toJson(x));
+      const result = [];
       for (const item of this) {
-        const value = Gdeic.toJson(Gdeic.copy(item));
-        if (array.indexOf(value) > -1) {
-          _array.push(value);
+        if (array.indexOf(item) > -1) {
+          result.push(item);
         }
       }
-      return _array.map(x => Gdeic.fromJson(x));
+      return result;
     },
     writable: false,
     enumerable: false
   });
   Reflect.defineProperty(_.prototype, 'differentiate', {
     value: function differentiate(array: any[]): any[] {
-      const _array = [];
-      const that = this.map(x => Gdeic.toJson(x));
+      const result = [];
       for (const item of array) {
-        const value = Gdeic.toJson(Gdeic.copy(item));
-        if (that.indexOf(value) < 0) {
-          _array.push(value);
+        if (this.indexOf(item) < 0) {
+          result.push(item);
         }
       }
-      array = array.map(x => Gdeic.toJson(x));
       for (const item of this.reverse()) {
-        const value = Gdeic.toJson(Gdeic.copy(item));
-        if (array.indexOf(value) < 0) {
-          _array.unshift(value);
+        if (array.indexOf(item) < 0) {
+          result.unshift(item);
         }
       }
-      return _array.map(x => Gdeic.fromJson(x));
+      return result;
     },
     writable: false,
     enumerable: false
@@ -58,10 +50,9 @@ interface Array<T> {
       for (let i = 0, max = this.length; i < max; i++) {
         result[i] = this[i];
       }
-      const that = this.map(x => Gdeic.toJson(x));
-      for (const value of array) {
-        if (that.indexOf(Gdeic.toJson(value)) < 0) {
-          result.push(value);
+      for (const item of array) {
+        if (this.indexOf(item) < 0) {
+          result.push(item);
         }
       }
       return result;
