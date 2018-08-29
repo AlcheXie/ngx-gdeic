@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "build": "rimraf dist && ng-packagr -p src/package.json",
-    "pack": "npm pack -p \"./dist\""
+    "pack": "npm pack -p \"./dist\"",
+    "pkg:clean": "del package-lock.json && rd /s /q \"./node_modules/\"",
+    "pkg:reinstall": "npm run pkg:clean && npm install"
   },
   "repository": {
     "type": "git",
