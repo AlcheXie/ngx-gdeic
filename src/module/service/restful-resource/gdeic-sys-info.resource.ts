@@ -9,6 +9,8 @@ import { Observable } from 'rxjs';
 export interface GdeicSysInfoResourceMethods {
   register: (body: GdeicRegisterAccount) => Observable<GdeicAccount>;
   login: (body: { UserName: string; PassWord: string; CheckCode: string }) => Observable<any>;
+  changePassword: (body: { AccountId: string, OldPassword: string, NewPassword: string }) => Observable<boolean>;
+  resetPassword: (body: { AccountId: string, NewPassword: string }) => Observable<boolean>;
   me: () => Observable<GdeicLoginAccount>;
   myMenu: () => Observable<GdeicMenu[]>;
 }
@@ -20,6 +22,16 @@ const _actions: { [name: string]: GdeicRestfulAction } = {
   },
   login: {
     url: 'api/account/login',
+    method: 'POST',
+    observe: 'response',
+    responseType: 'text'
+  },
+  changePassword: {
+    url: 'api/account/change-pwd',
+    method: 'POST'
+  },
+  resetPassword: {
+    url: 'api/account/reset-pwd',
     method: 'POST'
   },
   me: {
@@ -37,6 +49,8 @@ export class GdeicSysInfoResource implements GdeicRestfulResource, GdeicSysInfoR
   readonly ResourceName = 'GdeicSysInfoResource';
   readonly register: (body: GdeicRegisterAccount) => Observable<GdeicAccount>;
   readonly login: (body: { UserName: string; PassWord: string; CheckCode: string }) => Observable<any>;
+  readonly changePassword: (body: { AccountId: string, OldPassword: string, NewPassword: string }) => Observable<boolean>;
+  readonly resetPassword: (body: { AccountId: string, NewPassword: string }) => Observable<boolean>;
   readonly me: () => Observable<GdeicLoginAccount>;
   readonly myMenu: () => Observable<GdeicMenu[]>;
   constructor(
