@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { GdeicRestfulAction, GdeicRestfulResource, GdeicResultError } from '../interface/GdeicRestful';
 import { GdeicConfig } from './gdeic-config.service';
 
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, throwError } from 'rxjs';
 import { catchError, map, retry } from 'rxjs/operators';
 
 export let GDEIC_RESTFUL = 'GDEIC_RESTFUL';
@@ -88,8 +88,8 @@ export class GdeicRestful {
       this.loading$.next(true);
     }
     return observable.pipe(
-      map(this._extractData(Observable.throw)),
-      catchError(this._handleError(Observable.throw))
+      map(this._extractData(throwError)),
+      catchError(this._handleError(throwError))
     );
   }
 
