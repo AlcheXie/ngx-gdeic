@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 import { Gdeic } from './gdeic.service';
 
@@ -21,30 +21,31 @@ export interface GdeicFormArraySettings {
 export class GdeicForm {
   static getControlsConfig(controlsConfig: { [name: string]: GdeicFormArraySettings | any },
     initialValues: { [name: string]: any }, fb?: FormBuilder): { [name: string]: any } {
-    controlsConfig = Gdeic.copy(controlsConfig);
+    const resultControlsConfig = Gdeic.copy(controlsConfig);
     for (const key of Object.keys(controlsConfig)) {
-      const _config = controlsConfig[key],
+      const _config = resultControlsConfig[key],
+        _origin = controlsConfig[key],
         _value = initialValues[key];
-      if (_config !== undefined && _config !== null) {
-        if (_config.constructor === Array) {
-          if (_config.length > 1) {
+      if (_origin !== undefined && _origin !== null) {
+        if (_origin.constructor === Array) {
+          if (_origin.length > 1) {
             const _ref = _config[1];
             if (!!_ref && _ref.constructor === Object) {
               if (!_ref.reference || _ref.reference.constructor !== Array) {
                 throw new Error(`Missing reference array for properties '${key}'.`);
               }
-              switch (_config[0]) {
+              switch (_origin[0]) {
                 case GdeicFormArrayType.Radio:
                 case GdeicFormArrayType.Select:
                   if (_value) {
                     if (_ref.identification) {
                       const _result = _ref.reference.filter(x => x[_ref.identification] === _value[_ref.identification])[0];
-                      controlsConfig[key] = _result ? [_result[_ref.identification]] : [null];
+                      resultControlsConfig[key] = _result ? [_result[_ref.identification]] : [null];
                     } else {
-                      controlsConfig[key] = [_ref.reference.filter(x => x === _value)[0] || null];
+                      resultControlsConfig[key] = [_ref.reference.filter(x => x === _value)[0] || null];
                     }
                   } else {
-                    controlsConfig[key] = [_ref.defaultValue];
+                    resultControlsConfig[key] = [_ref.defaultValue];
                   }
                   break;
                 case GdeicFormArrayType.Checkbox:
@@ -57,10 +58,10 @@ export class GdeicForm {
                     _aRef = _ref.reference;
                     _aIdx = (_value || _ref.defaultValue).map(x => _aRef.indexOf(x)).filter(x => x > -1);
                   }
-                  controlsConfig[key] = new FormArray(_aRef.map((x, i) => fb.group({ checked: _aIdx.indexOf(i) > -1 })));
+                  resultControlsConfig[key] = new FormArray(_aRef.map((x, i) => fb.group({ checked: _aIdx.indexOf(i) > -1 })));
                   break;
                 case GdeicFormArrayType.MultiSelect:
-                  controlsConfig[key] = [(_value || _ref.defaultValue).map(x => _ref.identification ? x[_ref.identification] : x)];
+                  resultControlsConfig[key] = [(_value || _ref.defaultValue).map(x => _ref.identification ? x[_ref.identification] : x)];
                   break;
                 case GdeicFormArrayType.Group:
                   // be improving
@@ -69,7 +70,7 @@ export class GdeicForm {
               }
               const _validator = _config[2];
               if (!!_validator) {
-                controlsConfig[key].push(_validator);
+                resultControlsConfig[key].push(_validator);
               }
             } else {
               _config[0] = _value || _config[0];
@@ -81,26 +82,26 @@ export class GdeicForm {
               _config[0] = _value || _config[0];
             }
           }
-        } else if (_config.constructor === FormGroup) {
-          controlsConfig[key] = _config;
+        } else if (_origin.constructor === FormControl || _origin.constructor === FormGroup) {
+          resultControlsConfig[key] = _config;
         } else {
           if (_value !== undefined && _value !== null) {
             if (_value.constructor === Array || _value.constructor === Object) {
-              controlsConfig[key] = [_value];
+              resultControlsConfig[key] = [_value];
             } else {
-              controlsConfig[key] = _value;
+              resultControlsConfig[key] = _value;
             }
           }
         }
       } else {
         if (_value && (_value.constructor === Array || _value.constructor === Object)) {
-          controlsConfig[key] = [_value];
+          resultControlsConfig[key] = [_value];
         } else {
-          controlsConfig[key] = _value;
+          resultControlsConfig[key] = _value;
         }
       }
     }
-    return controlsConfig;
+    return resultControlsConfig;
   }
 
   static getResultSimply(formGroupValue: { [name: string]: any }, valueTemplate: { [name: string]: any }): any {
@@ -160,6 +161,7 @@ export class GdeicForm {
 
   static resetFormByValue(formGroup: FormGroup, formGroupValue: { [name: string]: any }): void {
     formGroupValue = formGroupValue || {};
+    formGroupValue = Gdeic.copy(formGroupValue);
     for (const key of Object.keys(formGroupValue)) {
       if (formGroupValue[key] && formGroupValue[key].constructor && formGroupValue[key].constructor === Array) {
         formGroupValue[key] = Array.from(formGroupValue[key]);
