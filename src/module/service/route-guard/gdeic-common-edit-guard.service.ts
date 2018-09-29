@@ -9,7 +9,14 @@ import { GdeicCache } from '../gdeic-cache.service';
 
 import { Observable, Subject } from 'rxjs';
 
-const _editItemCacheName = 'coreEditItem';
+export const enum GdeicEditStatus {
+  None,
+  Edit,
+  View
+}
+
+const _editItemCacheName = 'gdeicEditItem';
+const _viewItemCacheName = 'gdeicViewItem';
 const _routerEventMap = new Map();
 
 export interface GdeicCanComponentDeactivate {
@@ -18,7 +25,14 @@ export interface GdeicCanComponentDeactivate {
 
 @Injectable()
 export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCanComponentDeactivate> {
+  get currentStatus(): GdeicEditStatus {
+    return this._currentStatus;
+  }
+
   private readonly _submit$ = new Subject<boolean>();
+  private _currentStatus = GdeicEditStatus.None;
+  private _baseUrl: string;
+  private _allowUrls: (string | RegExp)[];
   private _successCallback: Function;
 
   constructor(
@@ -30,13 +44,13 @@ export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCan
 
   canActivate(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const _cache = this.getData();
-    if (_cache === undefined) {
+    if (_cache === undefined || _cache === null) {
       const _paths = state.url.split('/').reverse();
       _paths.shift();
       this._router.navigate(_paths.reverse());
       return false;
     } else {
-      if (state.url.indexOf(this._router.url) < 0) {
+      if (!state.url.includes(this._router.url)) {
         this._router.navigateByUrl(this._router.url);
         history.back();
         return false;
@@ -62,11 +76,15 @@ export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCan
   }
 
   canDeactivate(component: GdeicCanComponentDeactivate): boolean {
-    if (component.canDeactivate) {
-      if (component.canDeactivate()) {
-        return true;
+    if (this._currentStatus === GdeicEditStatus.Edit) {
+      if (component.canDeactivate) {
+        if (component.canDeactivate()) {
+          return true;
+        } else {
+          return window.confirm('是否放弃编辑？');
+        }
       } else {
-        return window.confirm('是否放弃编辑？');
+        return true;
       }
     } else {
       return true;
@@ -74,17 +92,34 @@ export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCan
   }
 
   new(currentRoute: ActivatedRoute, successCallback: Function = Gdeic.noop): void {
-    this.edit({}, 'new', currentRoute, successCallback);
+    this._currentStatus = GdeicEditStatus.Edit;
+    this.edit({}, 'new', currentRoute, [], successCallback);
+    this._watchRouteChangeInDetail();
   }
 
-  edit(editItem: any, url: string, currentRoute: ActivatedRoute, successCallback: Function = Gdeic.noop): void {
+  edit(editItem: any, url: string, currentRoute: ActivatedRoute,
+    allowChildUrls: (string | RegExp)[], successCallback: Function = Gdeic.noop): void {
+    this._currentStatus = GdeicEditStatus.Edit;
+    this._baseUrl = this._router.url;
+    this._allowUrls = allowChildUrls;
     this._cache.put(_editItemCacheName, Gdeic.copy(editItem));
     this._router.navigate([url], { relativeTo: currentRoute });
     this._successCallback = successCallback;
+    this._watchRouteChangeInDetail();
   }
 
   multiEdit(editItems: any[], currentRoute: ActivatedRoute, successCallback: Function = Gdeic.noop): void {
-    this.edit(editItems, 'multi', currentRoute, successCallback);
+    this._currentStatus = GdeicEditStatus.Edit;
+    this.edit(editItems, 'multi', currentRoute, [], successCallback);
+  }
+
+  view(viewItems: any, url: string, currentRoute: ActivatedRoute): void {
+    this._currentStatus = GdeicEditStatus.View;
+    this._baseUrl = this._router.url;
+    this._allowUrls = [];
+    this._cache.put(_viewItemCacheName, Gdeic.copy(viewItems));
+    this._router.navigate([url], { relativeTo: currentRoute });
+    this._watchRouteChangeInDetail();
   }
 
   submit(promise?: Promise<any>): void {
@@ -97,7 +132,14 @@ export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCan
   }
 
   getData(): any {
-    return this._cache.get(_editItemCacheName);
+    switch (this._currentStatus) {
+      case GdeicEditStatus.Edit:
+        return this._cache.get(_editItemCacheName);
+      case GdeicEditStatus.View:
+        return this._cache.get(_viewItemCacheName);
+      default:
+        return null;
+    }
   }
 
   watchRouteChange(url: string, callback: Function): void {
@@ -110,15 +152,57 @@ export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCan
         if (data instanceof NavigationEnd) {
           if (data.url === undefined) {
             return;
-          } else if (data.url.indexOf(url) < 0) {
+          } else if (!data.url.includes(url)) {
             _subscription.unsubscribe();
             _routerEventMap.delete(url);
-            this._cache.remove(_editItemCacheName);
+            this._removeData();
           } else {
             callback(data);
           }
         }
       });
     _routerEventMap.set(url, _subscription);
+  }
+
+  private _removeData(): void {
+    this._cache.remove(_editItemCacheName);
+    this._cache.remove(_viewItemCacheName);
+    this._currentStatus = GdeicEditStatus.None;
+    this._baseUrl = '';
+    this._allowUrls = [];
+  }
+
+  private _watchRouteChangeInDetail(): void {
+    let _curentUrl: string;
+    const _subscription = this._router.events
+      .subscribe(data => {
+        if (data instanceof NavigationEnd) {
+          if (!_curentUrl) {
+            _curentUrl = data.url;
+          }
+          if ((data.url || '').indexOf(this._baseUrl) < 0 || data.url === this._baseUrl) {
+            this._removeData();
+            _subscription.unsubscribe();
+          } else {
+            const _postUrl = data.url.replace(_curentUrl, '');
+            if (_postUrl.length > 0) {
+              let _isAllow = false;
+              for (const url of this._allowUrls) {
+                if (typeof url === 'string') {
+                  _isAllow = _postUrl === url;
+                } else {
+                  _isAllow = url.test(_postUrl);
+                }
+                if (_isAllow) { break; }
+              }
+              if (!_isAllow) {
+                this._router.navigateByUrl(this._baseUrl);
+                this._removeData();
+                _subscription.unsubscribe();
+              }
+            }
+          }
+        }
+      });
   }
 }
