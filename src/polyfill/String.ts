@@ -7,7 +7,8 @@ interface String {
     value: function trimAll() {
       return this.replace(/\s/g, '');
     },
-    writable: false,
-    enumerable: false
+    configurable: false,
+    enumerable: false,
+    writable: false
   });
 }(String));

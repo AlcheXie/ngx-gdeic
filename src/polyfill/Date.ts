@@ -10,8 +10,9 @@ interface Date {
       this.setHours(this.getHours() + diff);
       return this;
     },
-    writable: false,
-    enumerable: false
+    configurable: false,
+    enumerable: false,
+    writable: false
   });
   Reflect.defineProperty(_.prototype, 'toDateString', {
     value: function toDateString(format) {
@@ -45,7 +46,8 @@ interface Date {
       }
       return format;
     },
-    writable: false,
-    enumerable: false
+    configurable: false,
+    enumerable: false,
+    writable: false
   });
 }(Date));

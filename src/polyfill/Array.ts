@@ -10,8 +10,9 @@ interface Array<T> {
     value: function last() {
       return this[this.length - 1];
     },
-    writable: false,
-    enumerable: false
+    configurable: false,
+    enumerable: false,
+    writable: false
   });
   Reflect.defineProperty(_.prototype, 'intersect', {
     value: function intersect(array: any[]): any[] {
@@ -23,8 +24,9 @@ interface Array<T> {
       }
       return result;
     },
-    writable: false,
-    enumerable: false
+    configurable: false,
+    enumerable: false,
+    writable: false
   });
   Reflect.defineProperty(_.prototype, 'differentiate', {
     value: function differentiate(array: any[]): any[] {
@@ -41,8 +43,9 @@ interface Array<T> {
       }
       return result;
     },
-    writable: false,
-    enumerable: false
+    configurable: false,
+    enumerable: false,
+    writable: false
   });
   Reflect.defineProperty(_.prototype, 'union', {
     value: function union(array: any[]): any[] {
@@ -57,7 +60,8 @@ interface Array<T> {
       }
       return result;
     },
-    writable: false,
-    enumerable: false
+    configurable: false,
+    enumerable: false,
+    writable: false
   });
 }(Array));
