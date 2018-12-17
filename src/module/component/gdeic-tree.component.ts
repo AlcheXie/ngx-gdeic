@@ -20,9 +20,13 @@ export class GdeicTreeComponent {
   @Input()
   set gdeicTree(value: { [name: string]: any }) {
     this.tree = value;
+    if (this.gdeicHasTrigger && this.gdeicExpandRoot) {
+      this.tree.$$isExpand = true;
+    }
   }
   @Input() gdeicChildName: string;
   @Input() gdeicHasTrigger = false;
+  @Input() gdeicExpandRoot = false;
   @Input() gdeicIndent = 30;
   @ContentChild('treeview') treeview;
 
