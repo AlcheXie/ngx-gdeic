@@ -1,6 +1,8 @@
 import { Gdeic } from '../service/gdeic.service';
 import { GDEIC_RESTFUL } from '../service/gdeic-restful.service';
 
+import { Observable } from 'rxjs';
+
 export class GdeicEdit {
   private _source: any[];
 
@@ -20,7 +22,7 @@ export class GdeicEdit {
     return Promise.all(this._source.map(x => Promise.resolve(method(x))));
   }
 
-  fireAction(action: Function, params?: { [name: string]: string } | true): Promise<any[]> {
+  fireAction(action: (...values) => Observable<any>, params?: { [name: string]: string } | true): Promise<any[]> {
     let _data;
     if (params !== true) {
       _data = this._source.map(x => {
