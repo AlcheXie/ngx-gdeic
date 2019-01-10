@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Gdeic } from './service/gdeic.service';
 import { GdeicCache } from './service/gdeic-cache.service';
 import { GdeicConfig, GdeicConfigConfig } from './service/gdeic-config.service';
+import { GdeicExport } from './service/gdeic-export.service';
 import { GdeicRestful } from './service/gdeic-restful.service';
 
 import { GdeicCommonEditGuard } from './service/route-guard/gdeic-common-edit-guard.service';
@@ -62,9 +63,10 @@ export class GdeicCommonModule { }
   providers: [
     Gdeic,
     GdeicCache,
-    GdeicConfig,
-    GdeicRestful,
     GdeicCommonEditGuard,
+    GdeicConfig,
+    GdeicExport,
+    GdeicRestful,
     GdeicSysAccountResource,
     GdeicSysAdAccountResource,
     GdeicSysInfoResource,

@@ -32,6 +32,7 @@ export * from './module/pipe/gdeic-bool.pipe';
 export * from './module/service/gdeic.service';
 export * from './module/service/gdeic-cache.service';
 export * from './module/service/gdeic-config.service';
+export * from './module/service/gdeic-export.service';
 export * from './module/service/gdeic-form.service';
 export * from './module/service/gdeic-restful.service';
 
