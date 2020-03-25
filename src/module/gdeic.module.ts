@@ -18,6 +18,7 @@ import { GdeicSysRoleResource } from './service/restful-resource/gdeic-sys-role.
 
 import { GdeicArrayTextComponent } from './component/gdeic-array-text.component';
 import { GdeicErrorComponent } from './component/gdeic-error.component';
+import { GdeicImageInputComponent } from './component/gdeic-image-input.component';
 import { GdeicHoldOnComponent } from './component/gdeic-hold-on.component';
 import { GdeicLoadingComponent } from './component/gdeic-loading.component';
 import { GdeicTreeComponent } from './component/gdeic-tree.component';
@@ -35,6 +36,7 @@ import { GdeicBoolPipe } from './pipe/gdeic-bool.pipe';
     GdeicArrayTextComponent,
     GdeicErrorComponent,
     GdeicHoldOnComponent,
+    GdeicImageInputComponent,
     GdeicLoadingComponent,
     GdeicTreeComponent,
     GdeicPreventPropagationDirective,
@@ -45,6 +47,7 @@ import { GdeicBoolPipe } from './pipe/gdeic-bool.pipe';
     GdeicArrayTextComponent,
     GdeicErrorComponent,
     GdeicHoldOnComponent,
+    GdeicImageInputComponent,
     GdeicLoadingComponent,
     GdeicTreeComponent,
     GdeicPreventPropagationDirective,
