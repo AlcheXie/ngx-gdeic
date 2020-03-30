@@ -14,7 +14,7 @@ export interface GdeicRestfulAction {
 }
 
 export interface GdeicResultError {
-  StatusCode: number;
+  StatusCode?: number;
   ErrorMsg?: string;
 }
 
