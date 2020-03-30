@@ -6,7 +6,7 @@ import {
 import { GdeicRestful } from '../service/gdeic-restful.service';
 import { GdeicResultError } from '../interface/GdeicRestful';
 
-import { Subject, Subscription } from 'rxjs';
+import { fromEvent, Subject, Subscription } from 'rxjs';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -61,7 +61,8 @@ export class GdeicErrorComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     const _closeElem = this._elementRef.nativeElement.querySelectorAll('[gdeicErrorClose]')[0];
     if (_closeElem) {
-      _closeElem.addEventListener('click', () => this._clearMsg());
+      fromEvent(_closeElem, 'click')
+        .subscribe(() => this._clearMsg());
     }
   }
 
