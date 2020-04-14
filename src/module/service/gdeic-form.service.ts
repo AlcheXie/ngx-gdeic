@@ -28,7 +28,8 @@ export class GdeicForm {
     for (const key of Object.keys(controlsConfig)) {
       const _config = _resultControlsConfig[key],
         _origin = controlsConfig[key],
-        _value = initialValues[key];
+        _value = initialValues[key],
+        _hasValue = _value !== null && _value !== undefined;
       if (_origin !== undefined && _origin !== null) {
         if (_origin.constructor === Array) {
           if (_origin.length > 1) {
@@ -37,14 +38,20 @@ export class GdeicForm {
               if (_origin[0] === GdeicFormArrayType.Group) {
                 const _groups = (_value || []).map(x => GdeicForm.getFormGroup(_ref, x, fb));
                 _resultControlsConfig[key] = fb.array(_groups);
+              } else if (_origin[0] === GdeicFormArrayType.Radio) {
+                const _validator = _config[2];
+                if (!!_validator) {
+                  _resultControlsConfig[key] = new FormControl(_hasValue ? _value : _ref.defaultValue, _validator);
+                } else {
+                  _resultControlsConfig[key] = new FormControl(_hasValue ? _value : _ref.defaultValue);
+                }
               } else {
                 if (!_ref.reference || _ref.reference.constructor !== Array) {
                   throw new Error(`Missing reference array for properties '${key}'.`);
                 }
                 switch (_origin[0]) {
-                  case GdeicFormArrayType.Radio:
                   case GdeicFormArrayType.Select:
-                    if (_value) {
+                    if (_hasValue) {
                       if (_ref.identification) {
                         const _result = _ref.reference.filter(x => x[_ref.identification] === _value[_ref.identification])[0];
                         _resultControlsConfig[key] = _result ? [_result[_ref.identification]] : [null];
@@ -77,19 +84,19 @@ export class GdeicForm {
                 }
               }
             } else {
-              _config[0] = _value || _config[0];
+              _config[0] = _hasValue ? _value : _config[0];
             }
           } else {
-            if (_value && (_value.constructor === Array || _value.constructor === Object)) {
+            if (_hasValue && (_value.constructor === Array || _value.constructor === Object)) {
               _config[0] = [_value];
             } else {
-              _config[0] = _value || _config[0];
+              _config[0] = _hasValue ? _value : _config[0];
             }
           }
         } else if (_origin.constructor === FormControl || _origin.constructor === FormGroup) {
-          _resultControlsConfig[key] = _config;
+          _resultControlsConfig[key] = _origin;
         } else {
-          if (_value !== undefined && _value !== null) {
+          if (_hasValue) {
             if (_value.constructor === Array || _value.constructor === Object) {
               _resultControlsConfig[key] = [_value];
             } else {
@@ -98,7 +105,7 @@ export class GdeicForm {
           }
         }
       } else {
-        if (_value && (_value.constructor === Array || _value.constructor === Object)) {
+        if (_hasValue && (_value.constructor === Array || _value.constructor === Object)) {
           _resultControlsConfig[key] = [_value];
         } else {
           _resultControlsConfig[key] = _value;
@@ -127,6 +134,13 @@ export class GdeicForm {
             if (!!_ref && _ref.constructor === Object) {
               switch (_config[0]) {
                 case GdeicFormArrayType.Radio:
+                  if (formGroupValue[key] !== undefined && formGroupValue[key] !== null
+                    && formGroupValue[key].constructor === FormControl) {
+                    result[key] = formGroupValue[key].value;
+                  } else {
+                    result[key] = formGroupValue[key];
+                  }
+                  break;
                 case GdeicFormArrayType.Select:
                   if (_ref.identification) {
                     if (!!formGroupValue[key]) {
