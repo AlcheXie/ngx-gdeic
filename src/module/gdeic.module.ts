@@ -10,6 +10,7 @@ import { GdeicRestful } from './service/gdeic-restful.service';
 
 import { GdeicCommonEditGuard } from './service/route-guard/gdeic-common-edit-guard.service';
 
+import { GdeicSysAdResource } from './service/restful-resource/gedic-sys-ad.resource';
 import { GdeicSysAccountResource } from './service/restful-resource/gdeic-sys-account.resource';
 import { GdeicSysAdAccountResource } from './service/restful-resource/gdeic-sys-ad-account.resource';
 import { GdeicSysInfoResource } from './service/restful-resource/gdeic-sys-info.resource';
@@ -70,6 +71,7 @@ export class GdeicCommonModule { }
     GdeicConfig,
     GdeicExport,
     GdeicRestful,
+    GdeicSysAdResource,
     GdeicSysAccountResource,
     GdeicSysAdAccountResource,
     GdeicSysInfoResource,
