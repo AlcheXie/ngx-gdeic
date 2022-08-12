@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { GdeicRestfulAction, GdeicRestfulResource } from '../../interface/GdeicRestful';
+import { GdeicRestfulAction } from '../../interface/GdeicRestful';
 import { GdeicRestful } from '../../service/gdeic-restful.service';
 import { GdeicRole } from '../../interface/GdeicSys';
 
@@ -43,8 +43,7 @@ const _actions: { [name: string]: GdeicRestfulAction } = {
 };
 
 @Injectable()
-export class GdeicSysRoleResource implements GdeicRestfulResource, GdeicSysRoleResourceMethods {
-  readonly ResourceName = 'GdeicSysRoleResource';
+export class GdeicSysRoleResource implements GdeicSysRoleResourceMethods {
   readonly queryRole: () => Observable<GdeicRole[]>;
   readonly queryRoleAdmin: () => Observable<GdeicRole[]>;
   readonly getRoleById: (params: { id: string }) => Observable<GdeicRole>;

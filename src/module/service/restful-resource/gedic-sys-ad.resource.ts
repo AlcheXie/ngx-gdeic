@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { GdeicRestfulAction, GdeicRestfulResource } from '../../interface/GdeicRestful';
+import { GdeicRestfulAction } from '../../interface/GdeicRestful';
 import { GdeicRestful } from '../gdeic-restful.service';
 import { GdeicAd } from '../../interface/GdeicSys';
 
@@ -45,8 +45,7 @@ const _actions: { [name: string]: GdeicRestfulAction } = {
 };
 
 @Injectable()
-export class GdeicSysAdResource implements GdeicRestfulResource, GdeicSysAdResourceMethods {
-  readonly ResourceName = 'GdeicSysAdResource';
+export class GdeicSysAdResource implements GdeicSysAdResourceMethods {
   readonly getAdInfo: () => Observable<GdeicAd>;
   readonly getAdById: (params: { ouId: string }) => Observable<GdeicAd[]>;
   readonly getAdOuById: (params?: { ouId: string }) => Observable<GdeicAd[]>;

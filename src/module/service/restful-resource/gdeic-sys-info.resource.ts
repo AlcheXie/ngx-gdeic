@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { GdeicRestfulAction, GdeicRestfulResource } from '../../interface/GdeicRestful';
+import { GdeicRestfulAction } from '../../interface/GdeicRestful';
 import { GdeicRestful } from '../../service/gdeic-restful.service';
 import { GdeicAccount, GdeicLoginAccount, GdeicMenu, GdeicRegisterAccount } from '../../interface/GdeicSys';
 
@@ -45,8 +45,7 @@ const _actions: { [name: string]: GdeicRestfulAction } = {
 };
 
 @Injectable()
-export class GdeicSysInfoResource implements GdeicRestfulResource, GdeicSysInfoResourceMethods {
-  readonly ResourceName = 'GdeicSysInfoResource';
+export class GdeicSysInfoResource implements GdeicSysInfoResourceMethods {
   readonly register: (body: GdeicRegisterAccount) => Observable<GdeicAccount>;
   readonly login: (body: { UserName: string; PassWord: string; CheckCode: string }) => Observable<any>;
   readonly changePassword: (body: { AccountId: string, OldPassword: string, NewPassword: string }) => Observable<boolean>;

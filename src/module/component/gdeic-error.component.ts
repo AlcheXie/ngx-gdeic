@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 
 import { GdeicRestful } from '../service/gdeic-restful.service';
-import { GdeicResultError } from '../interface/GdeicRestful';
+import { GdeicResult } from '../interface/GdeicRestful';
 
 import { fromEvent, Subject, Subscription } from 'rxjs';
 
@@ -33,16 +33,16 @@ export class GdeicErrorComponent implements AfterViewInit, OnDestroy {
     this._closeByBackdrop = value;
   }
   @Input()
-  set gdeicErrorSubject(value: Subject<GdeicResultError>) {
+  set gdeicErrorSubject(value: Subject<GdeicResult>) {
     this._errorSubject = value;
   }
-  @Output() gdeicErrorChange = new EventEmitter<GdeicResultError>();
+  @Output() gdeicErrorChange = new EventEmitter<GdeicResult>();
 
   isShowError = false;
   private _closeByBackdrop = false;
-  private _errorSubject: Subject<GdeicResultError>;
+  private _errorSubject: Subject<GdeicResult>;
   private _subscription: Subscription;
-  private _error: GdeicResultError;
+  private _error: GdeicResult;
 
   constructor(
     private _elementRef: ElementRef,

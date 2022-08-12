@@ -124,10 +124,10 @@ export class GdeicCommonEditGuard implements CanActivate, CanDeactivate<GdeicCan
 
   submit(promise?: Promise<any>): void {
     if (promise === undefined) {
-      this._submit$.next();
+      this._submit$.next(true);
     } else {
       promise
-        .then(() => this._submit$.next());
+        .then(() => this._submit$.next(true));
     }
   }
 

@@ -5,11 +5,11 @@
   "author": "AlcheXie",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/common": "^6.0.0",
-    "@angular/core": "^6.0.0",
-    "@angular/forms": "^6.0.0",
-    "@angular/router": "^6.0.0",
-    "rxjs": "^6.0.0"
+    "@angular/common": "~13.3.0",
+    "@angular/core": "~13.3.0",
+    "@angular/forms": "~13.3.0",
+    "@angular/router": "~13.3.0",
+    "rxjs": "~7.5.0"
   },
   "ngPackage": {
     "$schema": "./node_modules/ng-packagr/ng-package.schema.json",

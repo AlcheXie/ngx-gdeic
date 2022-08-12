@@ -6,6 +6,7 @@ export interface GdeicRestfulAction {
   headers?: HttpHeaders | { [header: string]: string | string[]; };
   observe?: 'body' | 'events' | 'response';
   params?: HttpParams | { [param: string]: string | string[]; };
+  isSearch?: boolean;
   reportProgress?: boolean;
   responseType?: 'arraybuffer' | 'blob' | 'json' | 'text';
   withCredentials?: boolean;
@@ -13,11 +14,8 @@ export interface GdeicRestfulAction {
   retry?: number;
 }
 
-export interface GdeicResultError {
-  StatusCode?: number;
-  ErrorMsg?: string;
-}
-
-export interface GdeicRestfulResource {
-  readonly ResourceName: string;
+export interface GdeicResult {
+  StatusCode: number;
+  ErrorMsg: string;
+  Data?: any;
 }

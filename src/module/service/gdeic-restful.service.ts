@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { GdeicRestfulAction, GdeicRestfulResource, GdeicResultError } from '../interface/GdeicRestful';
+import { GdeicRestfulAction, GdeicResult } from '../interface/GdeicRestful';
 import { GdeicConfig } from './gdeic-config.service';
 
 import { Observable, Subject, throwError } from 'rxjs';
@@ -18,7 +18,7 @@ export class GdeicRestful {
   private static _responseTypeSet: Set<string> = new Set(['arraybuffer', 'blob', 'json', 'text']);
 
   readonly loading$: Subject<boolean> = new Subject<boolean>();
-  readonly error$: Subject<GdeicResultError> = new Subject<GdeicResultError>();
+  readonly error$: Subject<GdeicResult> = new Subject<GdeicResult>();
 
   private _isLoading = false;
 
@@ -34,7 +34,7 @@ export class GdeicRestful {
       for (const key of Object.keys(data)) {
         let value = data[key];
         if (value === undefined || value === null) { continue; }
-        if (value.constructor === String && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(value)) {
+        if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(value)) {
           if (value === '1900-01-01T00:00:00' || value === '0001-01-01T00:00:00') {
             delete data[key];
           } else {
@@ -103,7 +103,7 @@ export class GdeicRestful {
       .catch(this._handleError(Promise.reject));
   }
 
-  make(actions: { [name: string]: GdeicRestfulAction }, instance: GdeicRestfulResource): void {
+  make(actions: { [name: string]: GdeicRestfulAction }, instance: { [name: string]: any }): void {
     const _makeResourceMethod = (action: GdeicRestfulAction): ((...values: any[]) => Observable<any>) => {
       const _options = {
         observe: action.observe || 'body',
@@ -112,9 +112,9 @@ export class GdeicRestful {
         withCredentials: action.withCredentials || false,
         retry: action.retry || 3
       };
-      if (action.headers) { _options['headers'] = action.headers; }
+      if (!!action.headers) { _options['headers'] = action.headers; }
       if (!GdeicRestful._observeSet.has(action.observe)) { _options['observe'] = 'body'; }
-      if (action.params) { _options['params'] = action.params; }
+      if (!!action.params) { _options['params'] = action.params; }
       if (!GdeicRestful._responseTypeSet.has(action.responseType)) { _options['responseType'] = 'json'; }
 
       let _method = action.method || 'get';
@@ -127,9 +127,18 @@ export class GdeicRestful {
       if (GdeicRestful._paramMethodSet.has(_method)) {
         _function = (params: { [name: string]: any } = null): Observable<any> => {
           let _url = this._config.RESOURCE_BASE_URL + action.url;
-          if (params) {
-            for (const key of Object.keys(params)) {
-              _url = _url.replace(`:${key}`, params[key]);
+          if (!!params) {
+            if (!action.isSearch) {
+              for (const key of Object.keys(params)) {
+                _url = _url.replace(`:${key}`, params[key]);
+              }
+            } else {
+              _url += '?';
+              for (const key of Object.keys(params)) {
+                let value = params[key];
+                if (!value) { value = ''; }
+                _url += `${key}=${value}&`;
+              }
             }
           }
           return this._httpClient[_method](_url, _options).pipe(
@@ -167,9 +176,9 @@ export class GdeicRestful {
 
   private _extractData(rejectMethod: Function): ((data: any) => any) {
     return (data: any) => {
+      const _dataKeys = Object.keys(data).sort();
       if (data instanceof Object
         && (() => {
-          const _dataKeys = Object.keys(data).sort();
           for (const x of ['Data', 'ErrorMsg', 'StatusCode']) {
             if (_dataKeys.indexOf(x) < 0) { return false; }
           }
@@ -188,9 +197,12 @@ export class GdeicRestful {
             this._isLoading = false;
             this.loading$.next(false);
           }
-          return rejectMethod(data.ErrorMsg);
+          rejectMethod(data.ErrorMsg);
         }
       } else {
+        if (_dataKeys.includes('StatusCode') && _dataKeys.includes('ErrorMsg')) {
+          this.error$.next(data);
+        }
         if (this._isLoading) {
           this._isLoading = false;
           this.loading$.next(false);
@@ -206,9 +218,14 @@ export class GdeicRestful {
         this._isLoading = false;
         this.loading$.next(false);
       }
-      const _error = { StatusCode: +res.status, ErrorMsg: res.statusText };
-      this.error$.next(_error);
-      return rejectMethod(_error);
+      try {
+        const _error = { StatusCode: +res.status, ErrorMsg: res.statusText };
+        this.error$.next(_error);
+        rejectMethod(_error);
+      } catch (error) {
+        console.error(error);
+        rejectMethod(res);
+      }
     };
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { GdeicRestfulAction, GdeicRestfulResource } from '../../interface/GdeicRestful';
+import { GdeicRestfulAction } from '../../interface/GdeicRestful';
 import { GdeicRestful } from '../gdeic-restful.service';
 import { GdeicAccount } from '../../interface/GdeicSys';
 
@@ -45,8 +45,7 @@ const _actions: { [name: string]: GdeicRestfulAction } = {
 };
 
 @Injectable()
-export class GdeicSysAccountResource implements GdeicRestfulResource, GdeicSysAccountResourceMethods {
-  readonly ResourceName = 'GdeicSysAccountResource';
+export class GdeicSysAccountResource implements GdeicSysAccountResourceMethods {
   readonly queryAccount: () => Observable<GdeicAccount[]>;
   readonly addAccount: (body: GdeicAccount) => Observable<GdeicAccount>;
   readonly updateAccount: (body: GdeicAccount) => Observable<GdeicAccount>;
