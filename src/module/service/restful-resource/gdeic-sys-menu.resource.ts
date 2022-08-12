@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { GdeicRestfulAction, GdeicRestfulResource } from '../../interface/GdeicRestful';
+import { GdeicRestfulAction } from '../../interface/GdeicRestful';
 import { GdeicRestful } from '../../service/gdeic-restful.service';
 import { GdeicMenu } from '../../interface/GdeicSys';
 
@@ -38,8 +38,7 @@ const _actions: { [name: string]: GdeicRestfulAction } = {
 };
 
 @Injectable()
-export class GdeicSysMenuResource implements GdeicRestfulResource, GdeicSysMenuResourceMethods {
-  readonly ResourceName = 'GdeicSysMenuResource';
+export class GdeicSysMenuResource implements GdeicSysMenuResourceMethods {
   readonly queryMenu: () => Observable<GdeicMenu[]>;
   readonly getMenuById: (params: { id: string }) => Observable<GdeicMenu>;
   readonly addMenu: (body: GdeicMenu) => Observable<GdeicMenu>;

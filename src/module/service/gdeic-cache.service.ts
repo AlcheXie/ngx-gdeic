@@ -7,9 +7,10 @@ export class GdeicCache {
   private _cacheKeys: string[] = [];
   private _cacheMap: Map<string, any> = new Map();
 
-  put(key: string, value: any): void {
+  put(key: string, value: any): any {
     this._cacheMap.set(key, value);
     Gdeic.toggleItem(this._cacheKeys, key);
+    return value;
   }
 
   putAsync(key: string, promise: Promise<any>): Promise<any> {

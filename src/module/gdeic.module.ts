@@ -83,7 +83,7 @@ export class GdeicCommonModule { }
   ]
 })
 export class GdeicModule {
-  static forRoot(config: GdeicConfigConfig): ModuleWithProviders {
+  static forRoot(config: GdeicConfigConfig): ModuleWithProviders<GdeicModule> {
     return {
       ngModule: GdeicModule,
       providers: [
