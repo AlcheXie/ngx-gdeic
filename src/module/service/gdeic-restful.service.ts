@@ -7,8 +7,6 @@ import { GdeicConfig } from './gdeic-config.service';
 import { Observable, Subject, throwError } from 'rxjs';
 import { catchError, map, retry } from 'rxjs/operators';
 
-export let GDEIC_RESTFUL = 'GDEIC_RESTFUL';
-
 @Injectable()
 export class GdeicRestful {
   private static _timeDiff = -((new Date()).getTimezoneOffset() / 60);
@@ -74,13 +72,7 @@ export class GdeicRestful {
   constructor(
     private _httpClient: HttpClient,
     private _config: GdeicConfig
-  ) {
-    Object.defineProperty(window, GDEIC_RESTFUL, {
-      value: this,
-      writable: false,
-      enumerable: false
-    });
-  }
+  ) { }
 
   getObservable(observable: Observable<any>, isHoldOn: boolean = false): Observable<any> {
     if (isHoldOn) {

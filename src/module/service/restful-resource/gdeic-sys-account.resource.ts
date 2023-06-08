@@ -6,8 +6,6 @@ import { GdeicAccount } from '../../interface/GdeicSys';
 
 import { Observable } from 'rxjs';
 
-export const GDEIC_SYS_ACCOUNT_RESOURCE = 'GDEIC_SYS_ACCOUNT_RESOURCE';
-
 export interface GdeicSysAccountResourceMethods {
   queryAccount: () => Observable<GdeicAccount[]>;
   addAccount: (body: GdeicAccount) => Observable<GdeicAccount>;
@@ -57,10 +55,5 @@ export class GdeicSysAccountResource implements GdeicSysAccountResourceMethods {
     private _gdeicRestful: GdeicRestful
   ) {
     this._gdeicRestful.make(_actions, this);
-    Object.defineProperty(window, GDEIC_SYS_ACCOUNT_RESOURCE, {
-      value: this,
-      writable: false,
-      enumerable: false
-    });
   }
 }

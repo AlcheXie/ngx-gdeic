@@ -1,9 +1,12 @@
+import { inject } from '@angular/core';
+
 import { Gdeic } from '../service/gdeic.service';
-import { GDEIC_RESTFUL } from '../service/gdeic-restful.service';
+import { GdeicRestful } from '../service/gdeic-restful.service';
 
 import { Observable } from 'rxjs';
 
 export class GdeicEdit {
+  private _restful = inject(GdeicRestful);
   private _source: any[];
 
   static make(source: any | any[]): GdeicEdit {
@@ -35,6 +38,6 @@ export class GdeicEdit {
     } else {
       _data = this._source;
     }
-    return Promise.all(_data.map(x => window[GDEIC_RESTFUL].getPromise(action(x), true)));
+    return Promise.all(_data.map(x => this._restful.getPromise(action(x), true)));
   }
 }

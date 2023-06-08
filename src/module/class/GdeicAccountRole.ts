@@ -1,6 +1,8 @@
+import { inject } from '@angular/core';
+
 import { Gdeic } from '../service/gdeic.service';
-import { GDEIC_RESTFUL, GdeicRestful } from '../service/gdeic-restful.service';
-import { GDEIC_SYS_ACCOUNT_RESOURCE, GdeicSysAccountResource } from '../service/restful-resource/gdeic-sys-account.resource';
+import { GdeicRestful } from '../service/gdeic-restful.service';
+import { GdeicSysAccountResource } from '../service/restful-resource/gdeic-sys-account.resource';
 import * as GdeicSys from '../interface/GdeicSys';
 
 export class GdeicAccountRole {
@@ -8,8 +10,8 @@ export class GdeicAccountRole {
   Roles: GdeicSys.GdeicRole[];
   LockoutEnabled: boolean;
 
-  private _restful: GdeicRestful = window[GDEIC_RESTFUL];
-  private _sysAccountResource: GdeicSysAccountResource = window[GDEIC_SYS_ACCOUNT_RESOURCE];
+  private _restful: GdeicRestful = inject(GdeicRestful);
+  private _sysAccountResource: GdeicSysAccountResource = inject(GdeicSysAccountResource);
 
   constructor(
     account: GdeicSys.GdeicAccount | GdeicSys.GdeicAccount[]

@@ -6,8 +6,6 @@ import { GdeicAd } from '../../interface/GdeicSys';
 
 import { Observable } from 'rxjs';
 
-export const GDEIC_SYS_AD_RESOURCE = 'GDEIC_SYS_AD_RESOURCE';
-
 export interface GdeicSysAdResourceMethods {
   getAdInfo: () => Observable<GdeicAd>;
   getAdById: (params: { ouId: string }) => Observable<GdeicAd[]>;
@@ -57,10 +55,5 @@ export class GdeicSysAdResource implements GdeicSysAdResourceMethods {
     private _gdeicRestful: GdeicRestful
   ) {
     this._gdeicRestful.make(_actions, this);
-    Object.defineProperty(window, GDEIC_SYS_AD_RESOURCE, {
-      value: this,
-      writable: false,
-      enumerable: false
-    });
   }
 }

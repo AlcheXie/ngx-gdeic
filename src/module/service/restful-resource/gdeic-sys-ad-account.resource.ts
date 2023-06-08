@@ -2,11 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { GdeicRestfulAction } from '../../interface/GdeicRestful';
 import { GdeicRestful } from '../gdeic-restful.service';
-import { GdeicAdAccount, GdeicAd } from '../../interface/GdeicSys';
+import { GdeicAdAccount } from '../../interface/GdeicSys';
 
 import { Observable } from 'rxjs';
-
-export const GDEIC_SYS_AD_ACCOUNT_RESOURCE = 'GDEIC_SYS_AD_ACCOUNT_RESOURCE';
 
 export interface GdeicSysAdAccountResourceMethods {
   queryAccount: () => Observable<GdeicAdAccount[]>;
@@ -57,10 +55,5 @@ export class GdeicSysAdAccountResource implements GdeicSysAdAccountResourceMetho
     private _gdeicRestful: GdeicRestful
   ) {
     this._gdeicRestful.make(_actions, this);
-    Object.defineProperty(window, GDEIC_SYS_AD_ACCOUNT_RESOURCE, {
-      value: this,
-      writable: false,
-      enumerable: false
-    });
   }
 }
